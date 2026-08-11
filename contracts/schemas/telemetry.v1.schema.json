@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aminzoroufi/intelligent-industrial-iot-monitoring-platform/contracts/schemas/telemetry.v1.schema.json",
+  "title": "Industrial IoT telemetry v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "message_id", "site_id", "device_id", "sequence",
+    "device_time", "clock_synchronized", "uptime_ms", "firmware_version",
+    "quality", "replayed", "measurements", "sample_quality", "fault_flags"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "message_id": {"type": "string", "format": "uuid"},
+    "site_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "device_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "sequence": {"type": "integer", "minimum": 0, "maximum": 18446744073709551615},
+    "device_time": {"type": ["string", "null"], "format": "date-time"},
+    "clock_synchronized": {"type": "boolean"},
+    "uptime_ms": {"type": "integer", "minimum": 0},
+    "firmware_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$", "maxLength": 48},
+    "quality": {"enum": ["good", "degraded", "bad"]},
+    "replayed": {"type": "boolean"},
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["temperature_c", "vibration_rms_mps2", "vibration_peak_mps2", "vibration_crest_factor", "current_a"],
+      "properties": {
+        "temperature_c": {"type": ["number", "null"], "minimum": -80, "maximum": 200},
+        "vibration_rms_mps2": {"type": ["number", "null"], "minimum": 0, "maximum": 2000},
+        "vibration_peak_mps2": {"type": ["number", "null"], "minimum": 0, "maximum": 4000},
+        "vibration_crest_factor": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "current_a": {"type": ["number", "null"], "minimum": -0.1, "maximum": 10}
+      }
+    },
+    "sample_quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["temperature", "vibration", "current"],
+      "properties": {
+        "temperature": {"$ref": "#/$defs/sensorQuality"},
+        "vibration": {"$ref": "#/$defs/sensorQuality"},
+        "current": {"$ref": "#/$defs/sensorQuality"}
+      }
+    },
+    "fault_flags": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 32,
+      "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,47}$"}
+    }
+  },
+  "$defs": {
+    "sensorQuality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "valid_samples", "expected_samples"],
+      "properties": {
+        "status": {"enum": ["good", "missing", "stuck", "out_of_range", "noisy", "rate_invalid", "driver_error"]},
+        "valid_samples": {"type": "integer", "minimum": 0},
+        "expected_samples": {"type": "integer", "minimum": 1},
+        "error_code": {"type": ["string", "null"], "maxLength": 48}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"clock_synchronized": {"const": false}}, "required": ["clock_synchronized"]},
+      "then": {"properties": {"device_time": {"type": "null"}}}
+    }
+  ]
+}
+

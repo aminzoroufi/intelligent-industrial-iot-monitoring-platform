@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aminzoroufi/intelligent-industrial-iot-monitoring-platform/contracts/schemas/command-ack.v1.schema.json",
+  "title": "Industrial IoT command acknowledgement v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "message_id", "command_id", "site_id", "device_id", "device_time", "status", "result_code", "relay_on"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "message_id": {"type": "string", "format": "uuid"},
+    "command_id": {"type": "string", "format": "uuid"},
+    "site_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "device_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "device_time": {"type": ["string", "null"], "format": "date-time"},
+    "status": {"enum": ["accepted", "completed", "rejected", "expired", "failed"]},
+    "result_code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,47}$"},
+    "detail": {"type": ["string", "null"], "maxLength": 240},
+    "relay_on": {"type": "boolean"}
+  }
+}
+

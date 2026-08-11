@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "message_id": "018cc251-f400-7a88-8000-000000000041",
+  "command_id": "018cc251-f400-7a88-8000-000000000040",
+  "site_id": "workshop-demo",
+  "device_id": "motor-01",
+  "device_time": "2026-08-11T08:02:01Z",
+  "status": "completed",
+  "result_code": "RELAY_OFF",
+  "detail": null,
+  "relay_on": false
+}
+

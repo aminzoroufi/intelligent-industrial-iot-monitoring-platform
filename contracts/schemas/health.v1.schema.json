@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aminzoroufi/intelligent-industrial-iot-monitoring-platform/contracts/schemas/health.v1.schema.json",
+  "title": "Industrial IoT health v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "message_id", "site_id", "device_id", "sequence", "device_time", "uptime_ms", "firmware_version", "status", "rssi_dbm", "reset_reason", "reset_count", "queue_depth", "queue_capacity", "dropped_message_count", "modbus_status", "active_faults"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "message_id": {"type": "string", "format": "uuid"},
+    "site_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "device_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "sequence": {"type": "integer", "minimum": 0},
+    "device_time": {"type": ["string", "null"], "format": "date-time"},
+    "uptime_ms": {"type": "integer", "minimum": 0},
+    "firmware_version": {"type": "string", "maxLength": 48},
+    "status": {"enum": ["online", "degraded", "offline"]},
+    "rssi_dbm": {"type": ["integer", "null"], "minimum": -127, "maximum": 0},
+    "reset_reason": {"type": "string", "maxLength": 48},
+    "reset_count": {"type": "integer", "minimum": 0},
+    "queue_depth": {"type": "integer", "minimum": 0},
+    "queue_capacity": {"type": "integer", "minimum": 1},
+    "dropped_message_count": {"type": "integer", "minimum": 0},
+    "modbus_status": {"enum": ["ok", "timeout", "crc_error", "exception", "stale", "disabled"]},
+    "active_faults": {"type": "array", "uniqueItems": true, "maxItems": 32, "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,47}$"}}
+  }
+}
+

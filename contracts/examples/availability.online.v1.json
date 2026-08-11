@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "site_id": "workshop-demo",
+  "device_id": "motor-01",
+  "status": "online",
+  "reason": "boot"
+}
+

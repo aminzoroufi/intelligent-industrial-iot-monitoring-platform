@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aminzoroufi/intelligent-industrial-iot-monitoring-platform/contracts/schemas/command.v1.schema.json",
+  "title": "Industrial IoT command v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "command_id", "site_id", "device_id", "issued_at", "expires_at", "issued_by", "kind", "parameters"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "command_id": {"type": "string", "format": "uuid"},
+    "site_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "device_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,62}$"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "issued_by": {"type": "string", "minLength": 1, "maxLength": 128},
+    "kind": {"enum": ["set_demo_relay", "request_health", "apply_thresholds"]},
+    "parameters": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["relay_on", "timeout_s"], "properties": {"relay_on": {"type": "boolean"}, "timeout_s": {"type": "integer", "minimum": 1, "maximum": 30}}},
+        {"type": "object", "additionalProperties": false, "maxProperties": 0},
+        {"type": "object", "additionalProperties": false, "required": ["temperature_warning_c", "temperature_critical_c", "vibration_warning_mps2", "vibration_critical_mps2", "current_warning_a", "current_critical_a", "hysteresis_percent"], "properties": {"temperature_warning_c": {"type": "number"}, "temperature_critical_c": {"type": "number"}, "vibration_warning_mps2": {"type": "number", "minimum": 0}, "vibration_critical_mps2": {"type": "number", "minimum": 0}, "current_warning_a": {"type": "number", "minimum": 0}, "current_critical_a": {"type": "number", "minimum": 0}, "hysteresis_percent": {"type": "number", "minimum": 1, "maximum": 25}}}
+      ]
+    }
+  }
+}
+

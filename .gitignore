@@ -1,0 +1,48 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+provisioning-private/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+dist/
+build/
+*.egg-info/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+npm-debug.log*
+playwright-report/
+test-results/
+
+# Embedded and CAD build products (selected release artifacts are force-added)
+firmware/**/build/
+hardware/**/.cache/
+*.bak
+*.lck
+*-backups/
+*.FCStd1
+
+# Local data and tools
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
+.idea/
+.vscode/
+tmp/
+

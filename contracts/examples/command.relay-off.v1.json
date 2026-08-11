@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "command_id": "018cc251-f400-7a88-8000-000000000040",
+  "site_id": "workshop-demo",
+  "device_id": "motor-01",
+  "issued_at": "2026-08-11T08:02:00Z",
+  "expires_at": "2026-08-11T08:02:10Z",
+  "issued_by": "demo-admin",
+  "kind": "set_demo_relay",
+  "parameters": {"relay_on": false, "timeout_s": 10}
+}
+

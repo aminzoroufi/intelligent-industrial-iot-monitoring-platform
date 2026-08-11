@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "message_id": "018cc251-f400-7a88-8000-000000000030",
+  "site_id": "workshop-demo",
+  "device_id": "motor-01",
+  "sequence": 48,
+  "device_time": "2026-08-11T08:01:00Z",
+  "uptime_ms": 180000,
+  "firmware_version": "0.1.0",
+  "status": "online",
+  "rssi_dbm": -58,
+  "reset_reason": "power_on",
+  "reset_count": 1,
+  "queue_depth": 0,
+  "queue_capacity": 512,
+  "dropped_message_count": 0,
+  "modbus_status": "ok",
+  "active_faults": []
+}
+
