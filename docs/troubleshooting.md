@@ -1,5 +1,12 @@
 # Troubleshooting
 
+## Make exits before running a target on macOS
+
+An unaccepted system Xcode license can prevent `/usr/bin/make` from starting.
+Review and accept system licenses yourself if appropriate, or use the equivalent
+Docker Compose and Python commands documented in `docs/local-development.md`.
+Project setup does not require changing a system-wide agreement.
+
 ## Occupied ports
 
 The demo binds only loopback ports 8000, 1883, and 5432. Stop the conflicting
@@ -26,9 +33,15 @@ Obtain a bearer token from `/api/v1/auth/token` using form-encoded OAuth2
 password fields. Tokens are audience-bound, expire after 30 minutes by default,
 and are invalid after changing `IIOT_JWT_SECRET`.
 
-## Missing anomaly model or WebSocket data
+## Missing WebSocket data
 
-Those functions are not part of the currently verified backend milestone. They
-remain visibly pending in the requirements traceability and verification
+Confirm the client offers the `bearer` and access-token subprotocols, in that
+order. Query-string tokens are intentionally rejected. Then inspect API logs for
+listener reconnect warnings and ingestor logs for the corresponding persisted
+message.
+
+## Missing anomaly model
+
+The anomaly worker is not part of the currently verified backend milestone. It
+remains visibly pending in the requirements traceability and verification
 reports until implemented and executed.
-

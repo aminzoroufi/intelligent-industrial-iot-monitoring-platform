@@ -43,6 +43,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      mosquitto:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=2)"]
       interval: 5s
@@ -65,6 +67,24 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "test", "-f", "/app/run/ingestor-ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  simulated-gateway:
+    build:
+      context: .
+      dockerfile: docker/python.Dockerfile
+    env_file: ${IIOT_ENV_FILE:-.env}
+    command: ["python", "-m", "simulator.gateway_agent"]
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      mqtt-ingestor:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "test", "-f", "/app/run/simulated-gateway-ready"]
       interval: 5s
       timeout: 3s
       retries: 12

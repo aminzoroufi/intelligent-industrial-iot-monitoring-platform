@@ -16,11 +16,16 @@ from paho.mqtt.properties import Properties
 from paho.mqtt.reasoncodes import ReasonCode
 from pydantic import ValidationError
 
-from contracts.mqtt_topics import MAX_PAYLOAD_BYTES, telemetry_subscription
+from contracts.mqtt_topics import MAX_PAYLOAD_BYTES, TopicKind, subscription
 from services.api.app.database import SessionLocal
-from services.api.app.ingestion import SequenceCollisionError, persist_telemetry
+from services.api.app.ingestion import (
+    SequenceCollisionError,
+    persist_command_ack,
+    persist_health,
+    persist_telemetry,
+)
 from services.api.app.models import ErrorLog
-from services.api.app.schemas import TelemetryEnvelope
+from services.api.app.schemas import CommandAckEnvelope, HealthEnvelope, TelemetryEnvelope
 from services.api.app.settings import Settings, get_settings
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -32,13 +37,25 @@ READY_PATH = Path("run/ingestor-ready")
 class ParsedTopic:
     site_id: str
     device_id: str
+    kind: TopicKind
+
+
+def parse_topic(value: str) -> ParsedTopic:
+    parts = value.split("/")
+    if len(parts) != 5 or parts[0:2] != ["iiot", "v1"]:
+        raise ValueError("topic is not a version-1 application topic")
+    try:
+        kind = TopicKind(parts[4])
+    except ValueError as exc:
+        raise ValueError("topic kind is not supported") from exc
+    return ParsedTopic(site_id=parts[2], device_id=parts[3], kind=kind)
 
 
 def parse_telemetry_topic(value: str) -> ParsedTopic:
-    parts = value.split("/")
-    if len(parts) != 5 or parts[0:2] != ["iiot", "v1"] or parts[4] != "telemetry":
+    parsed = parse_topic(value)
+    if parsed.kind is not TopicKind.TELEMETRY:
         raise ValueError("topic is not a version-1 telemetry topic")
-    return ParsedTopic(site_id=parts[2], device_id=parts[3])
+    return parsed
 
 
 def decode_payload(topic: str, payload: bytes) -> TelemetryEnvelope:
@@ -50,6 +67,30 @@ def decode_payload(topic: str, payload: bytes) -> TelemetryEnvelope:
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("payload is not valid UTF-8 JSON") from exc
     envelope = TelemetryEnvelope.model_validate(raw)
+    if envelope.site_id != parsed_topic.site_id or envelope.device_id != parsed_topic.device_id:
+        raise ValueError("topic and payload identities do not match")
+    return envelope
+
+
+def decode_health(topic: str, payload: bytes) -> HealthEnvelope:
+    parsed_topic = parse_topic(topic)
+    if parsed_topic.kind is not TopicKind.HEALTH:
+        raise ValueError("topic is not a health topic")
+    if len(payload) > MAX_PAYLOAD_BYTES:
+        raise ValueError("payload exceeds 16 KiB contract limit")
+    envelope = HealthEnvelope.model_validate_json(payload)
+    if envelope.site_id != parsed_topic.site_id or envelope.device_id != parsed_topic.device_id:
+        raise ValueError("topic and payload identities do not match")
+    return envelope
+
+
+def decode_command_ack(topic: str, payload: bytes) -> CommandAckEnvelope:
+    parsed_topic = parse_topic(topic)
+    if parsed_topic.kind is not TopicKind.COMMAND_ACKS:
+        raise ValueError("topic is not a command acknowledgement topic")
+    if len(payload) > MAX_PAYLOAD_BYTES:
+        raise ValueError("payload exceeds 16 KiB contract limit")
+    envelope = CommandAckEnvelope.model_validate_json(payload)
     if envelope.site_id != parsed_topic.site_id or envelope.device_id != parsed_topic.device_id:
         raise ValueError("topic and payload identities do not match")
     return envelope
@@ -71,16 +112,26 @@ def record_error(code: str, detail: str, device_id: str | None = None) -> None:
 
 def handle_message(topic: str, payload: bytes) -> str:
     try:
-        envelope = decode_payload(topic, payload)
+        parsed_topic = parse_topic(topic)
         with SessionLocal() as session:
-            result = persist_telemetry(session, envelope)
+            if parsed_topic.kind is TopicKind.TELEMETRY:
+                telemetry = decode_payload(topic, payload)
+                result = persist_telemetry(session, telemetry)
+            elif parsed_topic.kind is TopicKind.HEALTH:
+                health = decode_health(topic, payload)
+                result = persist_health(session, health)
+            elif parsed_topic.kind is TopicKind.COMMAND_ACKS:
+                command_ack = decode_command_ack(topic, payload)
+                result = persist_command_ack(session, command_ack)
+            else:
+                raise ValueError("worker does not consume this topic kind")
         LOGGER.info(
             json.dumps(
                 {
                     "severity": "info",
                     "component": "mqtt-ingestor",
-                    "event": "telemetry_persisted",
-                    "device_id": envelope.device_id,
+                    "event": f"{parsed_topic.kind.value}_persisted",
+                    "device_id": parsed_topic.device_id,
                     "message_id": result.message_id,
                     "status": result.status,
                 }
@@ -125,7 +176,8 @@ def build_client(settings: Settings) -> mqtt.Client:
                 )
             )
             return
-        connected_client.subscribe(telemetry_subscription(), qos=1)
+        for kind in (TopicKind.TELEMETRY, TopicKind.HEALTH, TopicKind.COMMAND_ACKS):
+            connected_client.subscribe(subscription(kind), qos=1)
         READY_PATH.parent.mkdir(exist_ok=True)
         READY_PATH.touch()
 

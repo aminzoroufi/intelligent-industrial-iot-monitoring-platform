@@ -7,7 +7,7 @@ from __future__ import annotations
 from sqlalchemy import select
 
 from services.api.app.database import SessionLocal
-from services.api.app.models import Device, User
+from services.api.app.models import Device, ThresholdConfig, User
 from services.api.app.security import hash_password
 from services.api.app.settings import get_settings
 
@@ -38,6 +38,8 @@ def seed() -> None:
                     simulated=True,
                 )
             )
+        if session.get(ThresholdConfig, "motor-01") is None:
+            session.add(ThresholdConfig(device_id="motor-01"))
         session.commit()
 
 

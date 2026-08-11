@@ -35,9 +35,9 @@ It must not switch mains power or implement an emergency stop, personnel
 protection, or unattended safety-critical shutdown. The bench procedure
 requires a physical method to remove actuator power.
 
-## Planned local demo
+## Local software demo
 
-The complete software path will use:
+Start the verified backend operations slice with:
 
 ```sh
 cp .env.example .env
@@ -45,8 +45,10 @@ make demo
 make scenario-normal
 ```
 
-These commands are documented here as the agreed interface; they are not yet
-claimed as verified until their results appear in the verification report.
+This starts PostgreSQL, Mosquitto, FastAPI, MQTT ingestion, and a simulated
+gateway with retained health and safe-state command acknowledgements. The
+dashboard, embedded firmware, anomaly worker, and hardware paths remain pending.
+Exact executed evidence is recorded in `docs/verification-report.md`.
 
 ## Repository map
 
@@ -66,9 +68,9 @@ claimed as verified until their results appear in the verification report.
 - `BENCH-VERIFIED`: executed on the documented low-voltage physical bench.
 - `FIELD-VALIDATED`: evaluated on real equipment under a controlled protocol.
 
-The repository defaults to no claimed level until the first full simulated
-vertical slice is evidenced. Hardware paths remain explicitly unverified unless
-physical evidence is supplied.
+The current software ingestion and authenticated operations slices are
+`SIMULATED`. Hardware paths remain explicitly unverified unless physical
+evidence is supplied.
 
 ## Author and license
 
@@ -77,4 +79,3 @@ Copyright (c) 2026 Amin Zoroufi <aminn.zoroufi@gmail.com>
 Source is visible for portfolio inspection under the custom
 [Portfolio Source-Available License](LICENSE.md). This is not an open-source
 license and it is marked for legal review.
-

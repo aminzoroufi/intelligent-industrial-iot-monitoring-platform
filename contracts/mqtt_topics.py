@@ -32,4 +32,9 @@ def topic(site_id: str, device_id: str, kind: TopicKind) -> str:
 
 def telemetry_subscription() -> str:
     """Return the broker subscription for every version-1 telemetry stream."""
-    return f"{TOPIC_ROOT}/{TOPIC_VERSION}/+/+/{TopicKind.TELEMETRY.value}"
+    return subscription(TopicKind.TELEMETRY)
+
+
+def subscription(kind: TopicKind) -> str:
+    """Return the broker subscription for a version-1 message kind."""
+    return f"{TOPIC_ROOT}/{TOPIC_VERSION}/+/+/{kind.value}"

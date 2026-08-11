@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 
 from sqlalchemy import (
     JSON,
+    BigInteger,
     Boolean,
     DateTime,
     Float,
@@ -62,6 +63,23 @@ class Device(Base):
     telemetry: Mapped[list[Telemetry]] = relationship(back_populates="device")
 
 
+class ThresholdConfig(Base):
+    __tablename__ = "threshold_configs"
+
+    device_id: Mapped[str] = mapped_column(
+        ForeignKey("devices.id", ondelete="CASCADE"), primary_key=True
+    )
+    temperature_warning_c: Mapped[float] = mapped_column(Float, default=65.0)
+    temperature_critical_c: Mapped[float] = mapped_column(Float, default=75.0)
+    vibration_warning_mps2: Mapped[float] = mapped_column(Float, default=4.5)
+    vibration_critical_mps2: Mapped[float] = mapped_column(Float, default=7.0)
+    current_warning_a: Mapped[float] = mapped_column(Float, default=1.4)
+    current_critical_a: Mapped[float] = mapped_column(Float, default=1.8)
+    hysteresis_percent: Mapped[float] = mapped_column(Float, default=5.0)
+    updated_by: Mapped[str] = mapped_column(String(80), default="system")
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+
+
 class Telemetry(Base):
     __tablename__ = "telemetry"
     __table_args__ = (
@@ -74,11 +92,11 @@ class Telemetry(Base):
     message_id: Mapped[str] = mapped_column(String(36), unique=True, index=True)
     device_id: Mapped[str] = mapped_column(ForeignKey("devices.id", ondelete="CASCADE"))
     site_id: Mapped[str] = mapped_column(String(63), index=True)
-    sequence: Mapped[int] = mapped_column(Integer)
+    sequence: Mapped[int] = mapped_column(BigInteger)
     device_time: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
     clock_synchronized: Mapped[bool] = mapped_column(Boolean)
-    uptime_ms: Mapped[int] = mapped_column(Integer)
+    uptime_ms: Mapped[int] = mapped_column(BigInteger)
     firmware_version: Mapped[str] = mapped_column(String(48))
     quality: Mapped[str] = mapped_column(String(20))
     replayed: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -174,3 +192,22 @@ class ErrorLog(Base):
     device_id: Mapped[str | None] = mapped_column(String(63))
     detail: Mapped[str] = mapped_column(String(300))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+
+
+class DeviceCommand(Base):
+    __tablename__ = "device_commands"
+    __table_args__ = (Index("ix_command_device_issued", "device_id", "issued_at"),)
+
+    command_id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    device_id: Mapped[str] = mapped_column(
+        ForeignKey("devices.id", ondelete="CASCADE"), nullable=False
+    )
+    kind: Mapped[str] = mapped_column(String(48))
+    parameters: Mapped[dict[str, object]] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(String(24), default="queued")
+    result_code: Mapped[str | None] = mapped_column(String(48))
+    detail: Mapped[str | None] = mapped_column(String(240))
+    issued_by: Mapped[str] = mapped_column(String(80))
+    issued_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    acknowledged_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

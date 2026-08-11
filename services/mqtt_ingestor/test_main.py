@@ -8,7 +8,12 @@ from pathlib import Path
 
 import pytest
 
-from services.mqtt_ingestor.main import decode_payload, parse_telemetry_topic
+from services.mqtt_ingestor.main import (
+    decode_command_ack,
+    decode_health,
+    decode_payload,
+    parse_telemetry_topic,
+)
 
 ROOT = Path(__file__).parents[2]
 
@@ -30,5 +35,18 @@ def test_topic_payload_identity_mismatch_is_rejected() -> None:
 
 
 def test_invalid_topic_is_rejected() -> None:
-    with pytest.raises(ValueError, match="telemetry topic"):
+    with pytest.raises(ValueError, match="application topic"):
         parse_telemetry_topic("iiot/v2/workshop-demo/motor-01/telemetry")
+
+
+def test_health_and_command_ack_contracts_decode() -> None:
+    health = decode_health(
+        "iiot/v1/workshop-demo/motor-01/health",
+        (ROOT / "contracts/examples/health.v1.json").read_bytes(),
+    )
+    ack = decode_command_ack(
+        "iiot/v1/workshop-demo/motor-01/command-acks",
+        (ROOT / "contracts/examples/command-ack.v1.json").read_bytes(),
+    )
+    assert health.queue_capacity == 512
+    assert ack.result_code == "RELAY_OFF"
