@@ -1,0 +1,34 @@
+# Troubleshooting
+
+## Occupied ports
+
+The demo binds only loopback ports 8000, 1883, and 5432. Stop the conflicting
+local service or change the host-side port in `compose.yaml`; do not alter the
+container-side service addresses.
+
+## Migration or API startup failure
+
+Inspect `docker compose logs api postgres`. The API runs `alembic upgrade head`
+before seeding and serving. A changed database password does not modify an
+already initialized volume; use the bounded `make reset-demo` only when losing
+local demo data is intended.
+
+## MQTT messages are not persisted
+
+Check that Mosquitto and `mqtt-ingestor` are healthy, then inspect their logs.
+The worker rejects payloads over 16 KiB, invalid JSON/schema, invalid topics,
+and topic/payload identity mismatches. Duplicate message IDs are accepted as
+idempotent duplicates rather than inserted again.
+
+## API returns 401
+
+Obtain a bearer token from `/api/v1/auth/token` using form-encoded OAuth2
+password fields. Tokens are audience-bound, expire after 30 minutes by default,
+and are invalid after changing `IIOT_JWT_SECRET`.
+
+## Missing anomaly model or WebSocket data
+
+Those functions are not part of the currently verified backend milestone. They
+remain visibly pending in the requirements traceability and verification
+reports until implemented and executed.
+

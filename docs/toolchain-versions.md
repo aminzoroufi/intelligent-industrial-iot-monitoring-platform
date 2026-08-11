@@ -14,10 +14,11 @@ references; this table records the architecture baseline.
 | Paho MQTT | 2.1.0 | https://pypi.org/project/paho-mqtt/ | Maintained MQTT v5-capable release |
 | scikit-learn | 1.9.0 | https://pypi.org/project/scikit-learn/ | Current non-prerelease package |
 | Next.js | 16.2.11 | https://nextjs.org/blog | Active LTS security release; 16.3 is preview |
+| Mosquitto | 2.1.2 (`2.1.2-alpine` image) | https://mosquitto.org/blog/ and https://hub.docker.com/_/eclipse-mosquitto/tags | Current bug-fix release and exact published official image tag |
+| PostgreSQL | 18.3 (`18.3-bookworm` image) | https://www.postgresql.org/developer/roadmap/ and https://hub.docker.com/_/postgres | Current supported major/minor before the scheduled 2026-08-13 update |
 | ESP-IDF | stable release line | https://docs.espressif.com/projects/esp-idf/en/stable/ | Final patch is locked when firmware build is exercised |
 | KiCad | 10.0.4 | https://www.kicad.org/blog/ | Current stable bug-fix release |
 
 Container image digests and all JavaScript/Python transitive versions will be
 recorded after lock files are generated. A version is not called verified here
 solely because it is familiar; each entry has a dated primary source.
-
