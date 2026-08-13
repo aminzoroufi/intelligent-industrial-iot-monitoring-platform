@@ -13,22 +13,33 @@ Alarm acknowledgements, calibration changes, maintenance changes, threshold
 updates, command issuance, and device acknowledgements create durable audit
 events.
 
-## Live browser connection
+## Live dashboard connection
 
-After obtaining an OAuth access token, create the browser socket with a bearer
-subprotocol pair:
+The dashboard posts credentials to `/api/auth/login`. Its backend-for-frontend
+exchanges them for an OAuth access token and returns an `iiot_session` cookie
+with `HttpOnly`, `SameSite=Strict`, and a bounded lifetime. Browser JavaScript
+therefore opens the socket without handling the token:
 
 ```js
-const socket = new WebSocket("ws://localhost:8000/api/v1/ws", ["bearer", accessToken]);
+const socket = new WebSocket("ws://localhost:8000/api/v1/ws");
 socket.addEventListener("message", (event) => {
   const update = JSON.parse(event.data);
   console.log(update.type, update);
 });
 ```
 
-The server negotiates `bearer`. It emits `telemetry`, `health`,
-`alarm_acknowledged`, and `command_ack` events. The access token is deliberately
-absent from the URL so routine access logging does not record it.
+The API requires an exact browser Origin allow-list match before accepting the
+cookie-authenticated handshake. It emits `telemetry`, `health`,
+`alarm_acknowledged`, and `command_ack` events. All dashboard REST operations
+also pass through an allow-listed same-origin proxy, so the access token is
+absent from browser-readable storage and URLs.
+
+## Command-line WebSocket connection
+
+A non-browser diagnostic client can obtain a token directly and offer the
+subprotocol pair `bearer, <JWT>`. The server negotiates only `bearer`; the JWT is
+never placed in the URL. This flow is retained for deterministic integration
+tests and operational diagnostics, not for the dashboard.
 
 ## Alarm and threshold behavior
 

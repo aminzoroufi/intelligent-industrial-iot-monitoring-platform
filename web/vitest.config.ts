@@ -1,0 +1,18 @@
+// SPDX-FileCopyrightText: 2026 Amin Zoroufi <aminn.zoroufi@gmail.com>
+// SPDX-License-Identifier: LicenseRef-Portfolio-Source-Available
+
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL(".", import.meta.url)),
+    },
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./vitest.setup.ts"],
+    include: ["**/*.test.{ts,tsx}"],
+  },
+});

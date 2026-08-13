@@ -1,0 +1,43 @@
+{
+  "name": "iiot-operator-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "author": {
+    "name": "Amin Zoroufi",
+    "email": "aminn.zoroufi@gmail.com"
+  },
+  "license": "LicenseRef-Portfolio-Source-Available",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "next": "16.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.2",
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.12",
+    "jsdom": "30.0.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10"
+  },
+  "overrides": {
+    "postcss": "8.5.24",
+    "sharp": "0.35.0"
+  }
+}
