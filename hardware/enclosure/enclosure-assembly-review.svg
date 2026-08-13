@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+<rect width="960" height="600" fill="#0b1116"/>
+<text x="50" y="42" fill="#eef7f1" font-family="sans-serif" font-size="24">Parametric enclosure assembly · engineering render</text>
+<path d="M180 330 L600 330 L760 430 L340 430 Z" fill="#284b63" stroke="#86c5da" stroke-width="3"/>
+<path d="M180 330 L180 490 L340 575 L340 430 Z" fill="#183447" stroke="#86c5da" stroke-width="3"/>
+<path d="M340 430 L760 430 L760 520 L340 575 Z" fill="#1d3f54" stroke="#86c5da" stroke-width="3"/>
+<path d="M250 245 L570 245 L695 320 L375 320 Z" fill="#19624a" stroke="#7ee0b0" stroke-width="3"/>
+<text x="390" y="290" fill="#eef7f1" font-family="sans-serif" font-size="18">PCB 100 × 70 mm</text>
+<path d="M150 90 L630 90 L800 190 L320 190 Z" fill="#b9c9d2" fill-opacity="0.72" stroke="#eef7f1" stroke-width="3"/>
+<text x="350" y="145" fill="#14212a" font-family="sans-serif" font-size="18">Exploded lid</text>
+<line x1="700" y1="200" x2="700" y2="310" stroke="#ffcf70" stroke-width="3" stroke-dasharray="8 8"/>
+<text x="720" y="260" fill="#ffcf70" font-family="sans-serif" font-size="16">assembly axis</text>
+<text x="50" y="555" fill="#eef7f1" font-family="sans-serif" font-size="17">Internal envelope 108.0 × 78.0 mm; base wall 2.4 mm; no thermal/IP rating claimed.</text>
+</svg>

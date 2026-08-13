@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Amin Zoroufi <aminn.zoroufi@gmail.com>
+# SPDX-License-Identifier: LicenseRef-Portfolio-Source-Available
+dependencies:
+  idf: "==6.0.2"
+  espressif/cjson: "==1.7.19"

@@ -1,0 +1,86 @@
+solid iiot_lid
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 0.0000 78.0000 0.0000
+      vertex 108.0000 78.0000 0.0000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 108.0000 78.0000 0.0000
+      vertex 108.0000 0.0000 0.0000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 0.0000 2.4000
+      vertex 108.0000 0.0000 2.4000
+      vertex 108.0000 78.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 0.0000 2.4000
+      vertex 108.0000 78.0000 2.4000
+      vertex 0.0000 78.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 108.0000 0.0000 0.0000
+      vertex 108.0000 0.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 0.0000 0.0000
+      vertex 108.0000 0.0000 2.4000
+      vertex 0.0000 0.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 108.0000 0.0000 0.0000
+      vertex 108.0000 78.0000 0.0000
+      vertex 108.0000 78.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 108.0000 0.0000 0.0000
+      vertex 108.0000 78.0000 2.4000
+      vertex 108.0000 0.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 108.0000 78.0000 0.0000
+      vertex 0.0000 78.0000 0.0000
+      vertex 0.0000 78.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 108.0000 78.0000 0.0000
+      vertex 0.0000 78.0000 2.4000
+      vertex 108.0000 78.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 78.0000 0.0000
+      vertex 0.0000 0.0000 0.0000
+      vertex 0.0000 0.0000 2.4000
+    endloop
+  endfacet
+  facet normal 0 0 0
+    outer loop
+      vertex 0.0000 78.0000 0.0000
+      vertex 0.0000 0.0000 2.4000
+      vertex 0.0000 78.0000 2.4000
+    endloop
+  endfacet
+endsolid iiot_lid

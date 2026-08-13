@@ -1,0 +1,3 @@
+# Append these settings when building the Wokwi adapter.
+CONFIG_IIOT_SIMULATION=y
+CONFIG_IIOT_SERIAL_PROVISIONING=y

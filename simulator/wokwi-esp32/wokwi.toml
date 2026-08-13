@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Amin Zoroufi <aminn.zoroufi@gmail.com>
+# SPDX-License-Identifier: LicenseRef-Portfolio-Source-Available
+[wokwi]
+version = 1
+firmware = "../../firmware/esp32-gateway/build/flasher_args.json"
+elf = "../../firmware/esp32-gateway/build/iiot_esp32_gateway.elf"

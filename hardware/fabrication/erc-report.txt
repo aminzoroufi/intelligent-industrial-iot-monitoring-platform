@@ -1,0 +1,4 @@
+Status: NOT RUN
+Tool: kicad-cli 10.0.4
+Reason: tool is unavailable in the execution environment.
+This file is not a passing report and must be replaced by actual tool output.

@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "author": "Amin Zoroufi",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-stm32-bluepill",
+      "id": "node",
+      "top": -3.8,
+      "left": -4.3,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "fixture",
+      "top": -30.1,
+      "left": 238.2,
+      "attrs": {"value": "2048", "label": "DETERMINISTIC ADC FIXTURE"}
+    },
+    {
+      "type": "wokwi-logic-analyzer",
+      "id": "rtuAnalyzer",
+      "top": 151.4,
+      "left": 233.2,
+      "attrs": {"channelNames": "TX,RX,DE"}
+    }
+  ],
+  "connections": [
+    ["fixture:VCC", "node:3V3", "red", ["v-19.2", "h-96"]],
+    ["fixture:GND", "node:GND.2", "black", ["v48", "h-105.6"]],
+    ["fixture:SIG", "node:PA0", "green", ["h-48", "v67.2"]],
+    ["node:PA2", "rtuAnalyzer:D0", "blue", ["h86.4", "v105.6"]],
+    ["node:PA3", "rtuAnalyzer:D1", "purple", ["h76.8", "v115.2"]],
+    ["node:PB1", "rtuAnalyzer:D2", "orange", ["h67.2", "v124.8"]]
+  ],
+  "dependencies": {}
+}

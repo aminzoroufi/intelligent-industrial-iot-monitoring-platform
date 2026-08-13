@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "author": "Amin Zoroufi",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "gateway",
+      "top": -4.8,
+      "left": -4.8,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "relayLoad",
+      "top": -23.8,
+      "left": 246.8,
+      "attrs": {"color": "orange", "label": "SAFE DEMO RELAY LOAD"}
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "relayLimit",
+      "top": 65.35,
+      "left": 191.4,
+      "rotate": 90,
+      "attrs": {"value": "1000"}
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "faultButton",
+      "top": 171.4,
+      "left": 220.8,
+      "attrs": {"color": "red", "label": "NEXT SYNTHETIC FAULT", "bounce": "0"}
+    }
+  ],
+  "connections": [
+    ["gateway:27", "relayLimit:1", "orange", ["h55.2"]],
+    ["relayLimit:2", "relayLoad:A", "orange", ["v-39.6", "h19.2"]],
+    ["relayLoad:C", "gateway:GND.2", "black", ["v91.2", "h-79.2"]],
+    ["gateway:0", "faultButton:1.l", "red", ["h72", "v106.8"]],
+    ["faultButton:2.l", "gateway:GND.2", "black", ["v19.2", "h-120"]]
+  ],
+  "dependencies": {}
+}

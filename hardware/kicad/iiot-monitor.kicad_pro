@@ -1,0 +1,23 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {
+        "board_outline_line_width": 0.1
+      }
+    }
+  },
+  "cvpcb": {},
+  "erc": {},
+  "libraries": {},
+  "meta": {
+    "filename": "iiot-monitor.kicad_pro",
+    "version": 1
+  },
+  "net_settings": {},
+  "pcbnew": {},
+  "schematic": {},
+  "text_variables": {
+    "AUTHOR": "Amin Zoroufi <aminn.zoroufi@gmail.com>",
+    "SAFETY": "EXTRA-LOW-VOLTAGE DEMONSTRATOR ONLY; RELAY CONTACTS MUST NOT SWITCH MAINS"
+  }
+}

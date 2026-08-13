@@ -1,0 +1,788 @@
+EESchema Schematic File Version 4
+LIBS:iiot-monitor-cache
+EELAYER 29 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 1 1
+Title "Intelligent Industrial IoT Monitoring Carrier"
+Date "2026-08-11"
+Rev "A0-UNVERIFIED"
+Comp "Amin Zoroufi <aminn.zoroufi@gmail.com>"
+Comment1 "EXTRA-LOW-VOLTAGE DEMONSTRATOR ONLY - NO MAINS"
+Comment2 "UNVERIFIED: import into KiCad 10, run ERC, and review before layout use"
+$EndDescr
+Text Notes 700 450 0    100  ~ 20
+EXTRA-LOW-VOLTAGE DEMONSTRATOR ONLY; RELAY CONTACTS MUST NOT SWITCH MAINS
+$Comp
+L iiot-monitor-cache:5V_INPUT J1
+U 1 1 60000001
+P 1600 1300
+F 0 "J1" H 1600 1180 50  0000 C CNN
+F 1 "5V INPUT" H 1600 1420 50  0000 C CNN
+F 2 "Custom:TerminalBlock_2P_5.08mm" H 1600 1300 50  0001 C CNN
+F 3 "1715721" H 1600 1300 50  0001 C CNN
+	1    1600 1300
+	1    0    0    -1
+$EndComp
+Text Label 1100 1500 0    40   ~ 0
++5V
+Text Label 2100 1500 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:1_1A_PTC F1
+U 1 1 60000002
+P 4700 1300
+F 0 "F1" H 4700 1180 50  0000 C CNN
+F 1 "1.1A PTC" H 4700 1420 50  0000 C CNN
+F 2 "Custom:1812" H 4700 1300 50  0001 C CNN
+F 3 "MF-MSMF110-2" H 4700 1300 50  0001 C CNN
+	1    4700 1300
+	1    0    0    -1
+$EndComp
+Text Label 4200 1500 0    40   ~ 0
++5V_RAW
+Text Label 5200 1500 0    40   ~ 0
++5V_FUSED
+$Comp
+L iiot-monitor-cache:SS34 D1
+U 1 1 60000003
+P 7800 1300
+F 0 "D1" H 7800 1180 50  0000 C CNN
+F 1 "SS34" H 7800 1420 50  0000 C CNN
+F 2 "Custom:SMA" H 7800 1300 50  0001 C CNN
+F 3 "SS34" H 7800 1300 50  0001 C CNN
+	1    7800 1300
+	1    0    0    -1
+$EndComp
+Text Label 7300 1500 0    40   ~ 0
++5V_FUSED
+Text Label 8300 1500 0    40   ~ 0
++5V
+$Comp
+L iiot-monitor-cache:SMBJ5_0A D2
+U 1 1 60000004
+P 10900 1300
+F 0 "D2" H 10900 1180 50  0000 C CNN
+F 1 "SMBJ5.0A" H 10900 1420 50  0000 C CNN
+F 2 "Custom:SMB" H 10900 1300 50  0001 C CNN
+F 3 "SMBJ5.0A" H 10900 1300 50  0001 C CNN
+	1    10900 1300
+	1    0    0    -1
+$EndComp
+Text Label 10400 1500 0    40   ~ 0
++5V
+Text Label 11400 1500 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:AP2112K_3_3 U6
+U 1 1 60000005
+P 14000 1300
+F 0 "U6" H 14000 1180 50  0000 C CNN
+F 1 "AP2112K-3.3" H 14000 1420 50  0000 C CNN
+F 2 "Custom:SOT-23-5" H 14000 1300 50  0001 C CNN
+F 3 "AP2112K-3.3TRG1" H 14000 1300 50  0001 C CNN
+	1    14000 1300
+	1    0    0    -1
+$EndComp
+Text Label 13500 1500 0    40   ~ 0
+GND
+Text Label 13500 1380 0    40   ~ 0
++5V
+Text Label 13500 1260 0    40   ~ 0
++5V
+Text Label 14500 1500 0    40   ~ 0
+NC
+Text Label 14500 1380 0    40   ~ 0
++3V3
+$Comp
+L iiot-monitor-cache:100uF C1
+U 1 1 60000006
+P 1600 2500
+F 0 "C1" H 1600 2380 50  0000 C CNN
+F 1 "100uF" H 1600 2620 50  0000 C CNN
+F 2 "Custom:SMD_D8" H 1600 2500 50  0001 C CNN
+F 3 "EEE-FK1A101P" H 1600 2500 50  0001 C CNN
+	1    1600 2500
+	1    0    0    -1
+$EndComp
+Text Label 1100 2700 0    40   ~ 0
++5V
+Text Label 2100 2700 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:10uF C2
+U 1 1 60000007
+P 4700 2500
+F 0 "C2" H 4700 2380 50  0000 C CNN
+F 1 "10uF" H 4700 2620 50  0000 C CNN
+F 2 "Custom:0805" H 4700 2500 50  0001 C CNN
+F 3 "GRM21BR61A106KE19L" H 4700 2500 50  0001 C CNN
+	1    4700 2500
+	1    0    0    -1
+$EndComp
+Text Label 4200 2700 0    40   ~ 0
++5V
+Text Label 5200 2700 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:10uF C3
+U 1 1 60000008
+P 7800 2500
+F 0 "C3" H 7800 2380 50  0000 C CNN
+F 1 "10uF" H 7800 2620 50  0000 C CNN
+F 2 "Custom:0805" H 7800 2500 50  0001 C CNN
+F 3 "GRM21BR61A106KE19L" H 7800 2500 50  0001 C CNN
+	1    7800 2500
+	1    0    0    -1
+$EndComp
+Text Label 7300 2700 0    40   ~ 0
++3V3
+Text Label 8300 2700 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:ESP32_WROOM_32E U1
+U 1 1 60000009
+P 10900 2500
+F 0 "U1" H 10900 2380 50  0000 C CNN
+F 1 "ESP32-WROOM-32E" H 10900 2620 50  0000 C CNN
+F 2 "Custom:Module_ESP32-WROOM-32" H 10900 2500 50  0001 C CNN
+F 3 "ESP32-WROOM-32E-N4" H 10900 2500 50  0001 C CNN
+	1    10900 2500
+	1    0    0    -1
+$EndComp
+Text Label 10400 2880 0    40   ~ 0
+GND
+Text Label 10400 2760 0    40   ~ 0
++3V3
+Text Label 10400 2640 0    40   ~ 0
+ESP_EN
+Text Label 10400 2520 0    40   ~ 0
+RELAY_CTRL
+Text Label 10400 2400 0    40   ~ 0
+RS485_DE
+Text Label 10400 2280 0    40   ~ 0
+ESP_BOOT
+Text Label 10400 2160 0    40   ~ 0
+ACCEL_INT
+Text Label 10400 2040 0    40   ~ 0
+UART_RX
+Text Label 11400 2880 0    40   ~ 0
+UART_TX
+Text Label 11400 2760 0    40   ~ 0
+ACCEL_CS
+Text Label 11400 2640 0    40   ~ 0
+SPI_SCK
+Text Label 11400 2520 0    40   ~ 0
+SPI_MISO
+Text Label 11400 2400 0    40   ~ 0
+I2C_SDA
+Text Label 11400 2280 0    40   ~ 0
+I2C_SCL
+Text Label 11400 2160 0    40   ~ 0
+SPI_MOSI
+Text Label 11400 2040 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:22uF C4
+U 1 1 60000010
+P 14000 2500
+F 0 "C4" H 14000 2380 50  0000 C CNN
+F 1 "22uF" H 14000 2620 50  0000 C CNN
+F 2 "Custom:1206" H 14000 2500 50  0001 C CNN
+F 3 "GRM31CR61A226ME15L" H 14000 2500 50  0001 C CNN
+	1    14000 2500
+	1    0    0    -1
+$EndComp
+Text Label 13500 2700 0    40   ~ 0
++3V3
+Text Label 14500 2700 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:100nF C5
+U 1 1 60000011
+P 1600 3700
+F 0 "C5" H 1600 3580 50  0000 C CNN
+F 1 "100nF" H 1600 3820 50  0000 C CNN
+F 2 "Custom:0603" H 1600 3700 50  0001 C CNN
+F 3 "GRM188R71C104KA01D" H 1600 3700 50  0001 C CNN
+	1    1600 3700
+	1    0    0    -1
+$EndComp
+Text Label 1100 3900 0    40   ~ 0
++3V3
+Text Label 2100 3900 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:10k R1
+U 1 1 60000012
+P 4700 3700
+F 0 "R1" H 4700 3580 50  0000 C CNN
+F 1 "10k" H 4700 3820 50  0000 C CNN
+F 2 "Custom:0603" H 4700 3700 50  0001 C CNN
+F 3 "RC0603FR-0710KL" H 4700 3700 50  0001 C CNN
+	1    4700 3700
+	1    0    0    -1
+$EndComp
+Text Label 4200 3900 0    40   ~ 0
++3V3
+Text Label 5200 3900 0    40   ~ 0
+ESP_EN
+$Comp
+L iiot-monitor-cache:10k R2
+U 1 1 60000013
+P 7800 3700
+F 0 "R2" H 7800 3580 50  0000 C CNN
+F 1 "10k" H 7800 3820 50  0000 C CNN
+F 2 "Custom:0603" H 7800 3700 50  0001 C CNN
+F 3 "RC0603FR-0710KL" H 7800 3700 50  0001 C CNN
+	1    7800 3700
+	1    0    0    -1
+$EndComp
+Text Label 7300 3900 0    40   ~ 0
++3V3
+Text Label 8300 3900 0    40   ~ 0
+ESP_BOOT
+$Comp
+L iiot-monitor-cache:TMP117M U2
+U 1 1 60000014
+P 10900 3700
+F 0 "U2" H 10900 3580 50  0000 C CNN
+F 1 "TMP117M" H 10900 3820 50  0000 C CNN
+F 2 "Custom:WSON-6-2x2mm" H 10900 3700 50  0001 C CNN
+F 3 "TMP117MAIDRVR" H 10900 3700 50  0001 C CNN
+	1    10900 3700
+	1    0    0    -1
+$EndComp
+Text Label 10400 3900 0    40   ~ 0
+I2C_SCL
+Text Label 10400 3780 0    40   ~ 0
+GND
+Text Label 10400 3660 0    40   ~ 0
+ALERT_NC
+Text Label 11400 3900 0    40   ~ 0
+I2C_SDA
+Text Label 11400 3780 0    40   ~ 0
+ADD0_GND
+Text Label 11400 3660 0    40   ~ 0
++3V3
+$Comp
+L iiot-monitor-cache:100nF C6
+U 1 1 60000015
+P 14000 3700
+F 0 "C6" H 14000 3580 50  0000 C CNN
+F 1 "100nF" H 14000 3820 50  0000 C CNN
+F 2 "Custom:0603" H 14000 3700 50  0001 C CNN
+F 3 "GRM188R71C104KA01D" H 14000 3700 50  0001 C CNN
+	1    14000 3700
+	1    0    0    -1
+$EndComp
+Text Label 13500 3900 0    40   ~ 0
++3V3
+Text Label 14500 3900 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:INA219A U3
+U 1 1 60000016
+P 1600 4900
+F 0 "U3" H 1600 4780 50  0000 C CNN
+F 1 "INA219A" H 1600 5020 50  0000 C CNN
+F 2 "Custom:SOT-23-8" H 1600 4900 50  0001 C CNN
+F 3 "INA219AIDCNR" H 1600 4900 50  0001 C CNN
+	1    1600 4900
+	1    0    0    -1
+$EndComp
+Text Label 1100 5100 0    40   ~ 0
+I2C_SCL
+Text Label 1100 4980 0    40   ~ 0
+GND
+Text Label 1100 4860 0    40   ~ 0
+I2C_SDA
+Text Label 1100 4740 0    40   ~ 0
++3V3
+Text Label 2100 5100 0    40   ~ 0
+LOAD_IN
+Text Label 2100 4980 0    40   ~ 0
+LOAD_OUT
+Text Label 2100 4860 0    40   ~ 0
+GND
+Text Label 2100 4740 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:0_05R_1 R3
+U 1 1 60000017
+P 4700 4900
+F 0 "R3" H 4700 4780 50  0000 C CNN
+F 1 "0.05R 1%" H 4700 5020 50  0000 C CNN
+F 2 "Custom:2512" H 4700 4900 50  0001 C CNN
+F 3 "WSL2512R0500FEA" H 4700 4900 50  0001 C CNN
+	1    4700 4900
+	1    0    0    -1
+$EndComp
+Text Label 4200 5100 0    40   ~ 0
+LOAD_IN
+Text Label 5200 5100 0    40   ~ 0
+LOAD_OUT
+$Comp
+L iiot-monitor-cache:100nF C7
+U 1 1 60000018
+P 7800 4900
+F 0 "C7" H 7800 4780 50  0000 C CNN
+F 1 "100nF" H 7800 5020 50  0000 C CNN
+F 2 "Custom:0603" H 7800 4900 50  0001 C CNN
+F 3 "GRM188R71C104KA01D" H 7800 4900 50  0001 C CNN
+	1    7800 4900
+	1    0    0    -1
+$EndComp
+Text Label 7300 5100 0    40   ~ 0
++3V3
+Text Label 8300 5100 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:CURRENT_PATH J4
+U 1 1 60000019
+P 10900 4900
+F 0 "J4" H 10900 4780 50  0000 C CNN
+F 1 "CURRENT PATH" H 10900 5020 50  0000 C CNN
+F 2 "Custom:TerminalBlock_2P_5.08mm" H 10900 4900 50  0001 C CNN
+F 3 "1715721" H 10900 4900 50  0001 C CNN
+	1    10900 4900
+	1    0    0    -1
+$EndComp
+Text Label 10400 5100 0    40   ~ 0
+LOAD_IN
+Text Label 11400 5100 0    40   ~ 0
+LOAD_OUT
+$Comp
+L iiot-monitor-cache:ADXL345 U4
+U 1 1 60000020
+P 14000 4900
+F 0 "U4" H 14000 4780 50  0000 C CNN
+F 1 "ADXL345" H 14000 5020 50  0000 C CNN
+F 2 "Custom:LGA-14-3x5mm" H 14000 4900 50  0001 C CNN
+F 3 "ADXL345BCCZ-RL7" H 14000 4900 50  0001 C CNN
+	1    14000 4900
+	1    0    0    -1
+$EndComp
+Text Label 13500 5220 0    40   ~ 0
++3V3
+Text Label 13500 5100 0    40   ~ 0
++3V3
+Text Label 13500 4980 0    40   ~ 0
+GND
+Text Label 13500 4860 0    40   ~ 0
+GND
+Text Label 13500 4740 0    40   ~ 0
+GND
+Text Label 13500 4620 0    40   ~ 0
+GND
+Text Label 13500 4500 0    40   ~ 0
+ACCEL_CS
+Text Label 14500 5220 0    40   ~ 0
+ACCEL_INT
+Text Label 14500 5100 0    40   ~ 0
+NC
+Text Label 14500 4980 0    40   ~ 0
+GND
+Text Label 14500 4860 0    40   ~ 0
+SPI_MOSI
+Text Label 14500 4740 0    40   ~ 0
+SPI_MISO
+Text Label 14500 4620 0    40   ~ 0
+SPI_SCK
+Text Label 14500 4500 0    40   ~ 0
++3V3
+$Comp
+L iiot-monitor-cache:100nF C8
+U 1 1 60000021
+P 1600 6100
+F 0 "C8" H 1600 5980 50  0000 C CNN
+F 1 "100nF" H 1600 6220 50  0000 C CNN
+F 2 "Custom:0603" H 1600 6100 50  0001 C CNN
+F 3 "GRM188R71C104KA01D" H 1600 6100 50  0001 C CNN
+	1    1600 6100
+	1    0    0    -1
+$EndComp
+Text Label 1100 6300 0    40   ~ 0
++3V3
+Text Label 2100 6300 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:10uF C9
+U 1 1 60000022
+P 4700 6100
+F 0 "C9" H 4700 5980 50  0000 C CNN
+F 1 "10uF" H 4700 6220 50  0000 C CNN
+F 2 "Custom:0805" H 4700 6100 50  0001 C CNN
+F 3 "GRM21BR61A106KE19L" H 4700 6100 50  0001 C CNN
+	1    4700 6100
+	1    0    0    -1
+$EndComp
+Text Label 4200 6300 0    40   ~ 0
++3V3
+Text Label 5200 6300 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:MAX3485 U5
+U 1 1 60000023
+P 7800 6100
+F 0 "U5" H 7800 5980 50  0000 C CNN
+F 1 "MAX3485" H 7800 6220 50  0000 C CNN
+F 2 "Custom:SOIC-8" H 7800 6100 50  0001 C CNN
+F 3 "MAX3485ESA+" H 7800 6100 50  0001 C CNN
+	1    7800 6100
+	1    0    0    -1
+$EndComp
+Text Label 7300 6300 0    40   ~ 0
+UART_RX
+Text Label 7300 6180 0    40   ~ 0
+RS485_DE
+Text Label 7300 6060 0    40   ~ 0
+RS485_DE
+Text Label 7300 5940 0    40   ~ 0
+UART_TX
+Text Label 8300 6300 0    40   ~ 0
+GND
+Text Label 8300 6180 0    40   ~ 0
+RS485_A
+Text Label 8300 6060 0    40   ~ 0
+RS485_B
+Text Label 8300 5940 0    40   ~ 0
++3V3
+$Comp
+L iiot-monitor-cache:100nF C10
+U 1 1 60000024
+P 10900 6100
+F 0 "C10" H 10900 5980 50  0000 C CNN
+F 1 "100nF" H 10900 6220 50  0000 C CNN
+F 2 "Custom:0603" H 10900 6100 50  0001 C CNN
+F 3 "GRM188R71C104KA01D" H 10900 6100 50  0001 C CNN
+	1    10900 6100
+	1    0    0    -1
+$EndComp
+Text Label 10400 6300 0    40   ~ 0
++3V3
+Text Label 11400 6300 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:SM712 D3
+U 1 1 60000025
+P 14000 6100
+F 0 "D3" H 14000 5980 50  0000 C CNN
+F 1 "SM712" H 14000 6220 50  0000 C CNN
+F 2 "Custom:SOT-23" H 14000 6100 50  0001 C CNN
+F 3 "SM712-02HTG" H 14000 6100 50  0001 C CNN
+	1    14000 6100
+	1    0    0    -1
+$EndComp
+Text Label 13500 6300 0    40   ~ 0
+RS485_A
+Text Label 13500 6180 0    40   ~ 0
+GND
+Text Label 14500 6300 0    40   ~ 0
+RS485_B
+$Comp
+L iiot-monitor-cache:120R R4
+U 1 1 60000026
+P 1600 7300
+F 0 "R4" H 1600 7180 50  0000 C CNN
+F 1 "120R" H 1600 7420 50  0000 C CNN
+F 2 "Custom:0805" H 1600 7300 50  0001 C CNN
+F 3 "RC0805FR-07120RL" H 1600 7300 50  0001 C CNN
+	1    1600 7300
+	1    0    0    -1
+$EndComp
+Text Label 1100 7500 0    40   ~ 0
+RS485_A_TERM
+Text Label 2100 7500 0    40   ~ 0
+RS485_B_TERM
+$Comp
+L iiot-monitor-cache:TERM_ENABLE JP1
+U 1 1 60000027
+P 4700 7300
+F 0 "JP1" H 4700 7180 50  0000 C CNN
+F 1 "TERM ENABLE" H 4700 7420 50  0000 C CNN
+F 2 "Custom:PinHeader_1x02_P2.54mm" H 4700 7300 50  0001 C CNN
+F 3 "M20-9990346" H 4700 7300 50  0001 C CNN
+	1    4700 7300
+	1    0    0    -1
+$EndComp
+Text Label 4200 7500 0    40   ~ 0
+RS485_A
+Text Label 5200 7500 0    40   ~ 0
+RS485_A_TERM
+$Comp
+L iiot-monitor-cache:BIAS_A JP2
+U 1 1 60000028
+P 7800 7300
+F 0 "JP2" H 7800 7180 50  0000 C CNN
+F 1 "BIAS A" H 7800 7420 50  0000 C CNN
+F 2 "Custom:PinHeader_1x02_P2.54mm" H 7800 7300 50  0001 C CNN
+F 3 "M20-9990346" H 7800 7300 50  0001 C CNN
+	1    7800 7300
+	1    0    0    -1
+$EndComp
+Text Label 7300 7500 0    40   ~ 0
++3V3
+Text Label 8300 7500 0    40   ~ 0
+RS485_A
+$Comp
+L iiot-monitor-cache:BIAS_B JP3
+U 1 1 60000029
+P 10900 7300
+F 0 "JP3" H 10900 7180 50  0000 C CNN
+F 1 "BIAS B" H 10900 7420 50  0000 C CNN
+F 2 "Custom:PinHeader_1x02_P2.54mm" H 10900 7300 50  0001 C CNN
+F 3 "M20-9990346" H 10900 7300 50  0001 C CNN
+	1    10900 7300
+	1    0    0    -1
+$EndComp
+Text Label 10400 7500 0    40   ~ 0
+RS485_B
+Text Label 11400 7500 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:680R R5
+U 1 1 60000030
+P 14000 7300
+F 0 "R5" H 14000 7180 50  0000 C CNN
+F 1 "680R" H 14000 7420 50  0000 C CNN
+F 2 "Custom:0603" H 14000 7300 50  0001 C CNN
+F 3 "RC0603FR-07680RL" H 14000 7300 50  0001 C CNN
+	1    14000 7300
+	1    0    0    -1
+$EndComp
+Text Label 13500 7500 0    40   ~ 0
++3V3
+Text Label 14500 7500 0    40   ~ 0
+JP2_1
+$Comp
+L iiot-monitor-cache:680R R6
+U 1 1 60000031
+P 1600 8500
+F 0 "R6" H 1600 8380 50  0000 C CNN
+F 1 "680R" H 1600 8620 50  0000 C CNN
+F 2 "Custom:0603" H 1600 8500 50  0001 C CNN
+F 3 "RC0603FR-07680RL" H 1600 8500 50  0001 C CNN
+	1    1600 8500
+	1    0    0    -1
+$EndComp
+Text Label 1100 8700 0    40   ~ 0
+JP3_2
+Text Label 2100 8700 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:MODBUS_A_B_GND J2
+U 1 1 60000032
+P 4700 8500
+F 0 "J2" H 4700 8380 50  0000 C CNN
+F 1 "MODBUS A/B/GND" H 4700 8620 50  0000 C CNN
+F 2 "Custom:TerminalBlock_3P_5.08mm" H 4700 8500 50  0001 C CNN
+F 3 "1729128" H 4700 8500 50  0001 C CNN
+	1    4700 8500
+	1    0    0    -1
+$EndComp
+Text Label 4200 8700 0    40   ~ 0
+RS485_A
+Text Label 4200 8580 0    40   ~ 0
+RS485_B
+Text Label 5200 8700 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:AO3400A Q1
+U 1 1 60000033
+P 7800 8500
+F 0 "Q1" H 7800 8380 50  0000 C CNN
+F 1 "AO3400A" H 7800 8620 50  0000 C CNN
+F 2 "Custom:SOT-23" H 7800 8500 50  0001 C CNN
+F 3 "AO3400A" H 7800 8500 50  0001 C CNN
+	1    7800 8500
+	1    0    0    -1
+$EndComp
+Text Label 7300 8700 0    40   ~ 0
+RELAY_GATE
+Text Label 7300 8580 0    40   ~ 0
+GND
+Text Label 8300 8700 0    40   ~ 0
+RELAY_COIL_LOW
+$Comp
+L iiot-monitor-cache:100R R7
+U 1 1 60000034
+P 10900 8500
+F 0 "R7" H 10900 8380 50  0000 C CNN
+F 1 "100R" H 10900 8620 50  0000 C CNN
+F 2 "Custom:0603" H 10900 8500 50  0001 C CNN
+F 3 "RC0603FR-07100RL" H 10900 8500 50  0001 C CNN
+	1    10900 8500
+	1    0    0    -1
+$EndComp
+Text Label 10400 8700 0    40   ~ 0
+RELAY_CTRL
+Text Label 11400 8700 0    40   ~ 0
+RELAY_GATE
+$Comp
+L iiot-monitor-cache:100k R8
+U 1 1 60000035
+P 14000 8500
+F 0 "R8" H 14000 8380 50  0000 C CNN
+F 1 "100k" H 14000 8620 50  0000 C CNN
+F 2 "Custom:0603" H 14000 8500 50  0001 C CNN
+F 3 "RC0603FR-07100KL" H 14000 8500 50  0001 C CNN
+	1    14000 8500
+	1    0    0    -1
+$EndComp
+Text Label 13500 8700 0    40   ~ 0
+RELAY_GATE
+Text Label 14500 8700 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:SS14 D4
+U 1 1 60000036
+P 1600 9700
+F 0 "D4" H 1600 9580 50  0000 C CNN
+F 1 "SS14" H 1600 9820 50  0000 C CNN
+F 2 "Custom:SMA" H 1600 9700 50  0001 C CNN
+F 3 "SS14" H 1600 9700 50  0001 C CNN
+	1    1600 9700
+	1    0    0    -1
+$EndComp
+Text Label 1100 9900 0    40   ~ 0
+RELAY_COIL_LOW
+Text Label 2100 9900 0    40   ~ 0
++5V
+$Comp
+L iiot-monitor-cache:G5V_1_DC5 K1
+U 1 1 60000037
+P 4700 9700
+F 0 "K1" H 4700 9580 50  0000 C CNN
+F 1 "G5V-1-DC5" H 4700 9820 50  0000 C CNN
+F 2 "Custom:Relay_THT_6.5x10mm" H 4700 9700 50  0001 C CNN
+F 3 "G5V-1-DC5" H 4700 9700 50  0001 C CNN
+	1    4700 9700
+	1    0    0    -1
+$EndComp
+Text Label 4200 9900 0    40   ~ 0
++5V
+Text Label 4200 9780 0    40   ~ 0
+RELAY_COIL_LOW
+Text Label 5200 9900 0    40   ~ 0
+RELAY_COM
+Text Label 5200 9780 0    40   ~ 0
+RELAY_NO
+$Comp
+L iiot-monitor-cache:RELAY_COM_NO J3
+U 1 1 60000038
+P 7800 9700
+F 0 "J3" H 7800 9580 50  0000 C CNN
+F 1 "RELAY COM/NO" H 7800 9820 50  0000 C CNN
+F 2 "Custom:TerminalBlock_2P_5.08mm" H 7800 9700 50  0001 C CNN
+F 3 "1715721" H 7800 9700 50  0001 C CNN
+	1    7800 9700
+	1    0    0    -1
+$EndComp
+Text Label 7300 9900 0    40   ~ 0
+RELAY_COM
+Text Label 8300 9900 0    40   ~ 0
+RELAY_NO
+$Comp
+L iiot-monitor-cache:UART_PROGRAM J5
+U 1 1 60000039
+P 10900 9700
+F 0 "J5" H 10900 9580 50  0000 C CNN
+F 1 "UART PROGRAM" H 10900 9820 50  0000 C CNN
+F 2 "Custom:PinHeader_1x05_P2.54mm" H 10900 9700 50  0001 C CNN
+F 3 "M20-9990546" H 10900 9700 50  0001 C CNN
+	1    10900 9700
+	1    0    0    -1
+$EndComp
+Text Label 10400 9900 0    40   ~ 0
++3V3
+Text Label 10400 9780 0    40   ~ 0
+GND
+Text Label 10400 9660 0    40   ~ 0
+UART_TX
+Text Label 11400 9900 0    40   ~ 0
+UART_RX
+Text Label 11400 9780 0    40   ~ 0
+ESP_BOOT
+$Comp
+L iiot-monitor-cache:3V3 TP1
+U 1 1 60000040
+P 14000 9700
+F 0 "TP1" H 14000 9580 50  0000 C CNN
+F 1 "3V3" H 14000 9820 50  0000 C CNN
+F 2 "Custom:TestPoint_Loop" H 14000 9700 50  0001 C CNN
+F 3 "5000" H 14000 9700 50  0001 C CNN
+	1    14000 9700
+	1    0    0    -1
+$EndComp
+Text Label 13500 9900 0    40   ~ 0
++3V3
+$Comp
+L iiot-monitor-cache:GND TP2
+U 1 1 60000041
+P 1600 10900
+F 0 "TP2" H 1600 10780 50  0000 C CNN
+F 1 "GND" H 1600 11020 50  0000 C CNN
+F 2 "Custom:TestPoint_Loop" H 1600 10900 50  0001 C CNN
+F 3 "5000" H 1600 10900 50  0001 C CNN
+	1    1600 10900
+	1    0    0    -1
+$EndComp
+Text Label 1100 11100 0    40   ~ 0
+GND
+$Comp
+L iiot-monitor-cache:SDA TP3
+U 1 1 60000042
+P 4700 10900
+F 0 "TP3" H 4700 10780 50  0000 C CNN
+F 1 "SDA" H 4700 11020 50  0000 C CNN
+F 2 "Custom:TestPoint_Loop" H 4700 10900 50  0001 C CNN
+F 3 "5000" H 4700 10900 50  0001 C CNN
+	1    4700 10900
+	1    0    0    -1
+$EndComp
+Text Label 4200 11100 0    40   ~ 0
+I2C_SDA
+$Comp
+L iiot-monitor-cache:SCL TP4
+U 1 1 60000043
+P 7800 10900
+F 0 "TP4" H 7800 10780 50  0000 C CNN
+F 1 "SCL" H 7800 11020 50  0000 C CNN
+F 2 "Custom:TestPoint_Loop" H 7800 10900 50  0001 C CNN
+F 3 "5000" H 7800 10900 50  0001 C CNN
+	1    7800 10900
+	1    0    0    -1
+$EndComp
+Text Label 7300 11100 0    40   ~ 0
+I2C_SCL
+$Comp
+L iiot-monitor-cache:RS485_A TP5
+U 1 1 60000044
+P 10900 10900
+F 0 "TP5" H 10900 10780 50  0000 C CNN
+F 1 "RS485_A" H 10900 11020 50  0000 C CNN
+F 2 "Custom:TestPoint_Loop" H 10900 10900 50  0001 C CNN
+F 3 "5000" H 10900 10900 50  0001 C CNN
+	1    10900 10900
+	1    0    0    -1
+$EndComp
+Text Label 10400 11100 0    40   ~ 0
+RS485_A
+$Comp
+L iiot-monitor-cache:RS485_B TP6
+U 1 1 60000045
+P 14000 10900
+F 0 "TP6" H 14000 10780 50  0000 C CNN
+F 1 "RS485_B" H 14000 11020 50  0000 C CNN
+F 2 "Custom:TestPoint_Loop" H 14000 10900 50  0001 C CNN
+F 3 "5000" H 14000 10900 50  0001 C CNN
+	1    14000 10900
+	1    0    0    -1
+$EndComp
+Text Label 13500 11100 0    40   ~ 0
+RS485_B
+Text Notes 700 11100 0    60   ~ 12
+Labels define electrical nets. Component pin numbering and ratings require KiCad ERC and datasheet review.
+$EndSCHEMATC

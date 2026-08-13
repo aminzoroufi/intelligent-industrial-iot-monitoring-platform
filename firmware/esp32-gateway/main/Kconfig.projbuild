@@ -1,0 +1,14 @@
+menu "Industrial IoT gateway"
+
+config IIOT_SIMULATION
+    bool "Use deterministic Wokwi sensor adapter"
+    default n
+    help
+        Keeps production register drivers in the build while selecting a
+        deterministic, explicitly simulated data source at runtime.
+
+config IIOT_SERIAL_PROVISIONING
+    bool "Enable time-limited serial provisioning"
+    default y
+
+endmenu

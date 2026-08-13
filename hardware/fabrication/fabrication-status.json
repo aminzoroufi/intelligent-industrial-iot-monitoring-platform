@@ -1,0 +1,17 @@
+{
+  "fabrication_release_approved": false,
+  "generated_outputs": "review-only geometry generated from hardware/design.json",
+  "kicad_drc": "NOT_RUN_TOOL_UNAVAILABLE",
+  "kicad_erc": "NOT_RUN_TOOL_UNAVAILABLE",
+  "required_before_fabrication": [
+    "import and save the legacy schematic in KiCad 10",
+    "review symbols, footprints, pin numbers, ratings, and net labels against current datasheets",
+    "route power, signals, differential bus, and planes",
+    "run ERC and DRC with zero unexplained violations",
+    "regenerate all fabrication and 3D outputs using kicad-cli",
+    "independent electrical and safety review"
+  ],
+  "revision": "A0-UNVERIFIED",
+  "routing_status": "UNROUTED_REVIEW_PLACEMENT",
+  "schema_version": 1
+}

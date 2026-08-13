@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Amin Zoroufi <aminn.zoroufi@gmail.com>
+# SPDX-License-Identifier: LicenseRef-Portfolio-Source-Available
+[wokwi]
+version = 1
+firmware = "../../firmware/stm32-modbus-node/build-wokwi/iiot_stm32_modbus_node.hex"
+elf = "../../firmware/stm32-modbus-node/build-wokwi/iiot_stm32_modbus_node.elf"
