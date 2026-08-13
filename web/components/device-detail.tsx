@@ -84,9 +84,12 @@ export function DeviceDetail({ deviceId, initialDevice, initialTelemetry, initia
           result_code: event.result_code ?? command.result_code,
           acknowledged_at: new Date().toISOString(),
         } : command));
+        // The MQTT acknowledgement can outrun the HTTP 202 response. Refresh the
+        // authoritative audit so a command missing from local state is not lost.
+        void load();
       }
     },
-    [deviceId, mode],
+    [deviceId, load, mode],
   );
   const liveState = useLiveSocket(onLiveEvent);
 
@@ -175,7 +178,7 @@ export function DeviceDetail({ deviceId, initialDevice, initialTelemetry, initia
 
           <section className="panel">
             <div className="panel-header"><div><h2>Demo relay</h2><p>Short-lived, audited MQTT command</p></div></div>
-            <RelayControl deviceId={deviceId} commands={commands} onIssued={(command) => setCommands((current) => [command, ...current])} />
+            <RelayControl deviceId={deviceId} commands={commands} onIssued={(command) => setCommands((current) => current.some((item) => item.command_id === command.command_id) ? current : [command, ...current])} />
           </section>
 
           <section className="panel">
