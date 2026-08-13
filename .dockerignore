@@ -8,10 +8,13 @@ __pycache__
 .ruff_cache
 .mypy_cache
 .coverage
+coverage.xml
 htmlcov
 node_modules
 .next
 tmp
 hardware
-docs/screenshots
-
+docs
+firmware
+data/models
+web

@@ -15,6 +15,7 @@ __pycache__/
 .ruff_cache/
 .mypy_cache/
 .coverage
+coverage.xml
 htmlcov/
 .venv/
 dist/
@@ -28,6 +29,7 @@ out/
 npm-debug.log*
 playwright-report/
 test-results/
+*.tsbuildinfo
 
 # Embedded and CAD build products (selected release artifacts are force-added)
 firmware/**/build/
@@ -45,4 +47,5 @@ hardware/**/.cache/
 .idea/
 .vscode/
 tmp/
-
+data/models/*
+!data/models/.gitkeep

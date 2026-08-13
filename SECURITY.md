@@ -23,3 +23,11 @@ authorization, and complete a site-specific threat and safety review.
 Never report secrets through a public issue. If a secret is accidentally
 committed, revoke it before attempting history cleanup.
 
+## Model artifact trust
+
+The anomaly worker loads Joblib artifacts only from the administrator-controlled
+`IIOT_MODEL_ROOT`. Joblib uses pickle-compatible serialization and is unsafe for
+untrusted content. Never accept model uploads or place downloaded artifacts in
+that directory. The worker bounds resolved paths to the root and checks file,
+metadata, registry checksum, feature schema, and library version, but a checksum
+is an integrity check—not proof that an artifact came from a trusted author.

@@ -1,0 +1,138 @@
+# SPDX-FileCopyrightText: 2026 Amin Zoroufi <aminn.zoroufi@gmail.com>
+# SPDX-License-Identifier: LicenseRef-Portfolio-Source-Available
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python-docs-hardware:
+    name: Python, contracts, docs, and hardware static gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install locked project tools
+        run: python -m pip install -r requirements/ci.lock
+      - name: Lint and type-check
+        run: |
+          ruff format --check contracts services simulator scripts tests conftest.py
+          ruff check contracts services simulator scripts tests conftest.py
+          mypy contracts services simulator
+      - name: Test with branch coverage gate
+        run: >-
+          pytest tests services simulator -q
+          --cov=contracts --cov=services --cov=simulator --cov-branch
+          --cov-report=term-missing --cov-report=xml:coverage.xml --cov-fail-under=70
+      - name: Require the PDF rasterizer
+        run: command -v pdftoppm
+      - name: Verify hardware static artifacts
+        run: python scripts/generate_hardware_artifacts.py --check
+      - name: Rebuild and verify PDFs
+        run: |
+          python scripts/build_reports.py
+          python scripts/verify_reports.py
+          git diff --exit-code -- docs/report hardware/fabrication/iiot-monitor-schematic-review.pdf
+      - name: Verify attribution, links, identity, and release residue
+        run: |
+          python scripts/check_dependency_licenses.py
+          python scripts/check_repository_hygiene.py
+      - name: Upload coverage and report artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: verification-artifacts
+          path: |
+            coverage.xml
+            docs/report/*.pdf
+            hardware/fabrication/iiot-monitor-schematic-review.pdf
+          if-no-files-found: error
+          retention-days: 14
+
+  dashboard:
+    name: Dashboard lint, type, components, build, and audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.15.0
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install exact dashboard dependencies
+        run: npm --prefix web ci
+      - name: Run dashboard quality gates
+        run: |
+          npm --prefix web run lint
+          npm --prefix web run typecheck
+          npm --prefix web test
+          npm --prefix web run build
+          npm --prefix web audit --audit-level=high
+
+  firmware-host:
+    name: Shared ESP32/STM32 logic on host compiler
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Configure host tests
+        run: cmake -S firmware/host-tests -B firmware/host-tests/build
+      - name: Build host tests with warnings as errors
+        run: cmake --build firmware/host-tests/build --parallel
+      - name: Run host tests
+        run: ctest --test-dir firmware/host-tests/build --output-on-failure
+
+  compose-e2e:
+    name: Compose health, data path, and browser happy path
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      IIOT_ENV_FILE: .env.example
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.15.0
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Validate Compose configuration
+        run: docker compose --env-file .env.example config --quiet
+      - name: Build and start the complete local stack
+        run: docker compose --env-file .env.example up --build --detach --wait --wait-timeout 240
+      - name: Exercise MQTT-to-database API path
+        run: python3 scripts/compose_smoke.py
+      - name: Install browser test dependencies
+        run: |
+          npm --prefix web ci
+          npm --prefix web exec -- playwright install --with-deps chromium
+      - name: Run desktop and mobile operator happy paths
+        run: npm --prefix web run test:e2e
+      - name: Show service status after failure
+        if: failure()
+        run: |
+          docker compose --env-file .env.example ps
+          docker compose --env-file .env.example logs --tail=150
+      - name: Remove only this project's containers and volumes
+        if: always()
+        run: docker compose --env-file .env.example down --volumes --remove-orphans
