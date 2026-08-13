@@ -20,6 +20,7 @@ from pydantic import ValidationError
 
 from contracts.mqtt_topics import TopicKind, topic
 from services.api.app.schemas import RelayCommandCreate
+from simulator.telemetry_generator.main import build_envelope, scenario_values
 
 SITE_ID = "workshop-demo"
 DEVICE_ID = "motor-01"
@@ -33,6 +34,8 @@ class GatewayAgent:
         self.port = port
         self.started_monotonic = time.monotonic()
         self.sequence = 0
+        self.telemetry_sequence = int(time.time())
+        self.telemetry_values = scenario_values("normal", count=1_000_000)
         self.reset_count = 1
         self.relay_on = False
         self.relay_off_deadline: float | None = None
@@ -189,16 +192,37 @@ class GatewayAgent:
             retain=True,
         )
 
+    def publish_telemetry(self) -> None:
+        payload = build_envelope(
+            next(self.telemetry_values),
+            self.telemetry_sequence,
+            datetime.now(UTC),
+            "simulated-gateway",
+        )
+        payload["message_id"] = str(uuid4())
+        payload["uptime_ms"] = int((time.monotonic() - self.started_monotonic) * 1000)
+        self.client.publish(
+            topic(SITE_ID, DEVICE_ID, TopicKind.TELEMETRY),
+            json.dumps(payload),
+            qos=1,
+            retain=False,
+        )
+        self.telemetry_sequence += 1
+
     def run(self) -> None:
         self.client.connect(self.host, self.port, keepalive=30)
         self.client.loop_start()
         next_health = 0.0
+        next_telemetry = 0.0
         try:
             while True:
                 now = time.monotonic()
                 if now >= next_health:
                     self.publish_health()
                     next_health = now + 10
+                if now >= next_telemetry:
+                    self.publish_telemetry()
+                    next_telemetry = now + 2
                 if self.relay_off_deadline is not None and now >= self.relay_off_deadline:
                     self.relay_on = False
                     self.relay_off_deadline = None
