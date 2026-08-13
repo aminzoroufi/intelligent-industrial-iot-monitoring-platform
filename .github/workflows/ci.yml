@@ -40,6 +40,10 @@ jobs:
           pytest tests services simulator -q
           --cov=contracts --cov=services --cov=simulator --cov-branch
           --cov-report=term-missing --cov-report=xml:coverage.xml --cov-fail-under=70
+      - name: Install the PDF rasterizer
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends poppler-utils
       - name: Require the PDF rasterizer
         run: command -v pdftoppm
       - name: Verify hardware static artifacts
