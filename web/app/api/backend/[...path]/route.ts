@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Portfolio-Source-Available
 
 import { NextResponse, type NextRequest } from "next/server";
+import { isSameOrigin } from "@/lib/origin";
 
 const API_URL = process.env.IIOT_API_INTERNAL_URL ?? "http://127.0.0.1:8000";
 const DEVICE_ID = /^[a-z0-9][a-z0-9-]{0,62}$/;
@@ -74,7 +75,7 @@ async function forward(request: NextRequest, context: { params: Promise<{ path: 
   }
   if (!["GET", "HEAD"].includes(request.method)) {
     const origin = request.headers.get("origin");
-    if (origin !== null && origin !== request.nextUrl.origin) {
+    if (origin !== null && !isSameOrigin(origin, request.nextUrl.origin)) {
       return NextResponse.json({ detail: "Cross-origin mutation rejected" }, { status: 403 });
     }
   }
