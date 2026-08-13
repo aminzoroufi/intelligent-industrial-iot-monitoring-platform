@@ -38,7 +38,7 @@ Repository commit: recorded after each milestone
 | Dependency/license inventory | `scripts/check_dependency_licenses.py` | PASS (602 rows) | N/A | Exact Python runtime/CI and npm locks have non-missing license metadata; reviewed dispositions and strong-copyleft guard are current |
 | Public repository hygiene | `scripts/check_repository_hygiene.py` | PASS | N/A | All eligible public text files passed identity, placeholder, machine-path, local-link, source-SPDX, action-pin, required-artifact, and dashboard-font checksum checks |
 | GitHub workflow source | YAML parse and workflow policy inspection | PASS / NOT RUN | N/A | Three YAML files parse and all actions use full commit SHAs; hosted jobs cannot be claimed before publication |
-| GitHub publication | `gh auth status`, remote inspection | BLOCKED | N/A | The configured `aminzoroufi` CLI account has an invalid token and no `origin` remote is configured; no repository, push, tag, PR, or hosted CI result is claimed |
+| GitHub publication | `gh auth status`, `git push`, remote metadata inspection | PASS | N/A | The configured public repository exists under `aminzoroufi`; `main` was pushed without force, set as the remote default branch, and the requested description and topics were verified. Hosted CI status is reported separately after publication. |
 | Bench | Physical procedure | Not run | BENCH-VERIFIED | No physical evidence supplied |
 | Field | Validation protocol | Not run | FIELD-VALIDATED | Outside current evidence |
 
