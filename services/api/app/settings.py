@@ -27,9 +27,13 @@ class Settings(BaseSettings):
     mqtt_port: int = Field(default=1883, ge=1, le=65535)
     mqtt_username: str | None = None
     mqtt_password: SecretStr | None = None
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
     offline_after_s: int = Field(default=60, ge=10, le=3600)
     max_query_days: int = Field(default=31, ge=1, le=366)
+    model_root: str = "data/models"
+    model_stale_after_days: int = Field(default=30, ge=1, le=3650)
+    anomaly_poll_interval_s: float = Field(default=5.0, ge=0.2, le=300)
+    anomaly_minimum_feature_rows: int = Field(default=200, ge=50, le=1_000_000)
 
     @field_validator("jwt_secret", "ingest_token")
     @classmethod

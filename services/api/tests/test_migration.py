@@ -21,7 +21,13 @@ def test_baseline_migration_upgrade_and_downgrade(tmp_path: Path, monkeypatch) -
     command.upgrade(config, "head")
     engine = create_engine(f"sqlite+pysqlite:///{database_path}")
     tables = set(inspect(engine).get_table_names())
-    assert {"devices", "telemetry", "users", "audit_events"}.issubset(tables)
+    assert {
+        "devices",
+        "telemetry",
+        "users",
+        "audit_events",
+        "anomaly_models",
+    }.issubset(tables)
 
     command.downgrade(config, "base")
     assert set(inspect(engine).get_table_names()) == {"alembic_version"}

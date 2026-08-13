@@ -121,6 +121,27 @@ class TelemetryPage(BaseModel):
     limit: int
 
 
+class AnomalyModelView(BaseModel):
+    device_id: str
+    status: Literal["model_not_ready", "ready", "stale", "error"]
+    ready: bool
+    diagnostic: str
+    model_version: str | None = None
+    feature_schema_version: int | None = None
+    feature_names: list[str] = Field(default_factory=list)
+    training_start: datetime | None = None
+    training_end: datetime | None = None
+    training_sample_count: int = 0
+    validation_sample_count: int = 0
+    contamination: float | None = None
+    random_seed: int | None = None
+    sklearn_version: str | None = None
+    created_at: datetime | None = None
+    last_scored_at: datetime | None = None
+    score_interpretation: str = "higher is more anomalous; percentile is empirical, not probability"
+    field_performance_claimed: Literal[False] = False
+
+
 class IngestResult(BaseModel):
     status: Literal["inserted", "duplicate"]
     message_id: str

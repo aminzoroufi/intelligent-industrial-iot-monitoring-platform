@@ -63,6 +63,34 @@ class Device(Base):
     telemetry: Mapped[list[Telemetry]] = relationship(back_populates="device")
 
 
+class AnomalyModel(Base):
+    __tablename__ = "anomaly_models"
+    __table_args__ = (
+        UniqueConstraint("device_id", "model_version", name="uq_anomaly_device_version"),
+        Index("ix_anomaly_device_created", "device_id", "created_at"),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    device_id: Mapped[str] = mapped_column(
+        ForeignKey("devices.id", ondelete="CASCADE"), nullable=False
+    )
+    model_version: Mapped[str] = mapped_column(String(80), nullable=False)
+    status: Mapped[str] = mapped_column(String(24), default="ready")
+    feature_schema: Mapped[dict[str, object]] = mapped_column(JSON)
+    training_start: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    training_end: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    training_sample_count: Mapped[int] = mapped_column(Integer)
+    validation_sample_count: Mapped[int] = mapped_column(Integer)
+    contamination: Mapped[float] = mapped_column(Float)
+    random_seed: Mapped[int] = mapped_column(Integer)
+    sklearn_version: Mapped[str] = mapped_column(String(32))
+    artifact_path: Mapped[str] = mapped_column(String(300))
+    artifact_checksum: Mapped[str] = mapped_column(String(80))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+    last_scored_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    diagnostic: Mapped[str | None] = mapped_column(String(300))
+
+
 class ThresholdConfig(Base):
     __tablename__ = "threshold_configs"
 

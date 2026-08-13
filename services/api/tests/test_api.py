@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Generator
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import pytest
@@ -14,6 +15,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from services.api.app.database import get_db
 from services.api.app.main import create_app, safe_csv_text
+from services.api.app.models import AnomalyModel
 from services.api.app.settings import Settings
 
 ROOT = Path(__file__).parents[3]
@@ -42,6 +44,14 @@ async def login(client: AsyncClient) -> str:
     )
     assert response.status_code == 200
     return str(response.json()["access_token"])
+
+
+def current_query_window() -> dict[str, str]:
+    now = datetime.now(UTC)
+    return {
+        "start": (now - timedelta(days=1)).isoformat(),
+        "end": (now + timedelta(days=1)).isoformat(),
+    }
 
 
 @pytest.mark.asyncio
@@ -92,7 +102,7 @@ async def test_internal_ingestion_and_telemetry_query(
         bounded = await client.get(
             "/api/v1/devices/motor-01/telemetry",
             headers={"Authorization": f"Bearer {token}"},
-            params={"start": "2026-08-01T00:00:00Z", "end": "2026-08-12T00:00:00Z"},
+            params=current_query_window(),
         )
 
         assert ingest.json()["status"] == "inserted"
@@ -100,6 +110,57 @@ async def test_internal_ingestion_and_telemetry_query(
         assert telemetry.status_code == 422
         assert bounded.status_code == 200
         assert bounded.json()["count"] == 1
+
+
+@pytest.mark.asyncio
+async def test_anomaly_model_readiness_is_explicit(
+    session_factory: sessionmaker[Session],
+) -> None:
+    async with build_client(session_factory) as client:
+        token = await login(client)
+        headers = {"Authorization": f"Bearer {token}"}
+
+        missing = await client.get("/api/v1/devices/motor-01/anomaly-model", headers=headers)
+        unknown = await client.get("/api/v1/devices/unknown/anomaly-model", headers=headers)
+        assert missing.status_code == 200
+        assert missing.json()["status"] == "model_not_ready"
+        assert missing.json()["ready"] is False
+        assert "MODEL_NOT_READY" in missing.json()["diagnostic"]
+        assert unknown.status_code == 404
+
+        now = datetime.now(UTC)
+        with session_factory() as session:
+            session.add(
+                AnomalyModel(
+                    device_id="motor-01",
+                    model_version="iforest-v1-test",
+                    status="ready",
+                    feature_schema={"version": 1, "names": ["temperature_level_c"]},
+                    training_start=now - timedelta(days=2),
+                    training_end=now - timedelta(days=1),
+                    training_sample_count=240,
+                    validation_sample_count=60,
+                    contamination=0.02,
+                    random_seed=20260811,
+                    sklearn_version="1.9.0",
+                    artifact_path="motor-01/iforest-v1-test",
+                    artifact_checksum="sha256:test",
+                    created_at=now,
+                )
+            )
+            session.commit()
+
+        ready = await client.get("/api/v1/devices/motor-01/anomaly-model", headers=headers)
+        assert ready.status_code == 200
+        assert ready.json()["status"] == "ready"
+        assert ready.json()["ready"] is True
+        assert "artifact_path" not in ready.json()
+        assert ready.json()["field_performance_claimed"] is False
+
+        evaluation = await client.get("/api/v1/anomaly/evaluation-demo", headers=headers)
+        assert evaluation.status_code == 200
+        assert evaluation.json()["data_kind"] == "synthetic"
+        assert evaluation.json()["field_performance_claimed"] is False
 
 
 @pytest.mark.asyncio
@@ -183,8 +244,7 @@ async def test_operator_workflows_and_csv_export(
             headers=headers,
             params={
                 "metric": "temperature_c",
-                "start": "2026-08-01T00:00:00Z",
-                "end": "2026-08-12T00:00:00Z",
+                **current_query_window(),
             },
         )
         assert exported.status_code == 200

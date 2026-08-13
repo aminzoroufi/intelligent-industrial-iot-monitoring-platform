@@ -38,6 +38,12 @@ dev = [
   "pytest-cov==6.2.1",
   "ruff==0.12.8",
 ]
+docs = [
+  "pdfplumber==0.11.9",
+  "pillow==12.2.0",
+  "pypdf==6.10.0",
+  "reportlab==4.4.9",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["services", "contracts", "simulator"]
@@ -58,6 +64,9 @@ ignore = ["S101"]
 [tool.ruff.lint.per-file-ignores]
 "**/test_*.py" = ["S105", "S106"]
 "tests/**/*.py" = ["S105", "S106"]
+"scripts/generate_hardware_artifacts.py" = ["E501", "RUF001"]
+"scripts/build_reports.py" = ["E501", "RUF001"]
+"scripts/verify_reports.py" = ["S603", "S607"]
 
 [tool.mypy]
 python_version = "3.12"

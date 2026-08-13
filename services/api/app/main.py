@@ -7,9 +7,11 @@ from __future__ import annotations
 import asyncio
 import csv
 import io
+import json
 from collections.abc import AsyncIterator, Iterator
 from contextlib import asynccontextmanager, suppress
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import Annotated, Literal
 
 from fastapi import (
@@ -32,9 +34,15 @@ from services.api.app.command_service import issue_relay_command
 from services.api.app.database import get_db
 from services.api.app.events import notify_after_commit
 from services.api.app.ingestion import SequenceCollisionError, persist_telemetry
-from services.api.app.live import LiveConnectionManager, bearer_subprotocol_token, listen_for_events
+from services.api.app.live import (
+    LiveConnectionManager,
+    bearer_subprotocol_token,
+    listen_for_events,
+    websocket_origin_is_allowed,
+)
 from services.api.app.models import (
     Alarm,
+    AnomalyModel,
     AuditEvent,
     Calibration,
     Device,
@@ -47,6 +55,7 @@ from services.api.app.models import (
 )
 from services.api.app.schemas import (
     AlarmView,
+    AnomalyModelView,
     CalibrationCreate,
     CalibrationView,
     CommandView,
@@ -71,6 +80,8 @@ from services.api.app.security import (
     verify_password,
 )
 from services.api.app.settings import Settings, get_settings
+
+ROOT = Path(__file__).parents[3]
 
 
 def device_status(
@@ -127,6 +138,58 @@ def to_telemetry_view(row: Telemetry) -> TelemetryView:
         anomaly_score=row.anomaly_score,
         anomaly_percentile=row.anomaly_percentile,
         anomaly_reason=row.anomaly_reason,
+    )
+
+
+def to_anomaly_model_view(
+    model: AnomalyModel | None, device_id: str, settings: Settings
+) -> AnomalyModelView:
+    if model is None:
+        return AnomalyModelView(
+            device_id=device_id,
+            status="model_not_ready",
+            ready=False,
+            diagnostic="MODEL_NOT_READY: train from an explicitly selected healthy window",
+        )
+    feature_schema = model.feature_schema
+    version = feature_schema.get("version")
+    names = feature_schema.get("names")
+    created_at = model.created_at
+    comparable_created_at = (
+        created_at.replace(tzinfo=UTC) if created_at.tzinfo is None else created_at
+    )
+    stale = datetime.now(UTC) - comparable_created_at > timedelta(
+        days=settings.model_stale_after_days
+    )
+    model_status: Literal["ready", "stale", "error"]
+    if model.status == "error":
+        model_status = "error"
+    elif model.status == "stale" or stale:
+        model_status = "stale"
+    else:
+        model_status = "ready"
+    default_diagnostic = {
+        "ready": "model artifact passed registry checks and is available for scoring",
+        "stale": "MODEL_STALE: retrain from a reviewed healthy baseline window",
+        "error": "MODEL_ERROR: deterministic rules remain active",
+    }[model_status]
+    return AnomalyModelView(
+        device_id=device_id,
+        status=model_status,
+        ready=model_status == "ready",
+        diagnostic=model.diagnostic or default_diagnostic,
+        model_version=model.model_version,
+        feature_schema_version=int(version) if isinstance(version, int) else None,
+        feature_names=[str(name) for name in names] if isinstance(names, list) else [],
+        training_start=model.training_start,
+        training_end=model.training_end,
+        training_sample_count=model.training_sample_count,
+        validation_sample_count=model.validation_sample_count,
+        contamination=model.contamination,
+        random_seed=model.random_seed,
+        sklearn_version=model.sklearn_version,
+        created_at=model.created_at,
+        last_scored_at=model.last_scored_at,
     )
 
 
@@ -330,6 +393,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         items = [to_telemetry_view(row) for row in db.scalars(query)]
         return TelemetryPage(items=items, count=len(items), limit=limit)
 
+    @application.get(
+        "/api/v1/devices/{device_id}/anomaly-model",
+        response_model=AnomalyModelView,
+        tags=["anomaly"],
+    )
+    def get_anomaly_model(
+        device_id: str,
+        _user: CurrentUser,
+        db: Annotated[Session, Depends(get_db)],
+    ) -> AnomalyModelView:
+        if db.get(Device, device_id) is None:
+            raise HTTPException(status_code=404, detail="Device not found")
+        model = db.scalar(
+            select(AnomalyModel)
+            .where(AnomalyModel.device_id == device_id)
+            .order_by(AnomalyModel.created_at.desc(), AnomalyModel.id.desc())
+            .limit(1)
+        )
+        return to_anomaly_model_view(model, device_id, resolved)
+
     @application.post("/internal/v1/telemetry", response_model=IngestResult, tags=["internal"])
     def ingest_telemetry(
         envelope: TelemetryEnvelope,
@@ -360,6 +443,27 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if alarm_state:
             query = query.where(Alarm.state == alarm_state)
         return [to_alarm_view(alarm) for alarm in db.scalars(query)]
+
+    @application.get(
+        "/api/v1/anomaly/evaluation-demo",
+        response_model=dict[str, object],
+        tags=["anomaly"],
+    )
+    def anomaly_evaluation_demo(_user: CurrentUser) -> dict[str, object]:
+        report_path = ROOT / "data/demo/anomaly-evaluation.v1.json"
+        try:
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Synthetic anomaly evaluation report is unavailable",
+            ) from exc
+        if not isinstance(report, dict) or report.get("field_performance_claimed") is not False:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Synthetic anomaly evaluation report failed provenance validation",
+            )
+        return report
 
     @application.post(
         "/api/v1/alarms/{alarm_id}/acknowledge",
@@ -706,9 +810,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @application.websocket("/api/v1/ws")
     async def live_events(websocket: WebSocket) -> None:
+        origin = websocket.headers.get("origin")
+        if not websocket_origin_is_allowed(origin, resolved.allowed_origins):
+            await websocket.close(code=4403, reason="Origin not allowed")
+            return
+
         token = bearer_subprotocol_token(websocket.headers.get("sec-websocket-protocol"))
+        negotiated_subprotocol = "bearer" if token is not None else None
+        if token is None and origin in resolved.allowed_origins:
+            token = websocket.cookies.get("iiot_session")
         if token is None:
-            await websocket.close(code=4401, reason="Missing bearer subprotocol")
+            await websocket.close(code=4401, reason="Missing WebSocket credential")
             return
         try:
             username = decode_access_token(token, resolved)
@@ -726,7 +838,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             await websocket.close(code=4403, reason="Inactive user")
             return
 
-        await live_manager.connect(websocket, subprotocol="bearer")
+        await live_manager.connect(websocket, subprotocol=negotiated_subprotocol)
         await websocket.send_json({"type": "connected", "username": username})
         try:
             while True:

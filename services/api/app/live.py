@@ -62,6 +62,11 @@ def bearer_subprotocol_token(header: str | None) -> str | None:
     return token
 
 
+def websocket_origin_is_allowed(origin: str | None, allowed_origins: list[str]) -> bool:
+    """Require an exact allow-list match whenever a browser sends an Origin."""
+    return origin is None or origin in allowed_origins
+
+
 async def listen_for_events(
     settings: Settings,
     manager: LiveConnectionManager,

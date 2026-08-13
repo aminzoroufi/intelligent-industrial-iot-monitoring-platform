@@ -72,6 +72,26 @@ services:
       retries: 12
     restart: unless-stopped
 
+  anomaly-worker:
+    build:
+      context: .
+      dockerfile: docker/python.Dockerfile
+    env_file: ${IIOT_ENV_FILE:-.env}
+    command: ["python", "-m", "services.anomaly_worker.main", "run"]
+    volumes:
+      - model-data:/app/data/models
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "test", "-f", "/app/run/anomaly-worker-ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
   simulated-gateway:
     build:
       context: .
@@ -90,6 +110,27 @@ services:
       retries: 12
     restart: unless-stopped
 
+  web:
+    build:
+      context: ./web
+      args:
+        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL}
+    environment:
+      IIOT_API_INTERNAL_URL: http://api:8000
+      IIOT_COOKIE_SECURE: ${IIOT_COOKIE_SECURE:-false}
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
 volumes:
   postgres-data:
   mosquitto-data:
+  model-data:

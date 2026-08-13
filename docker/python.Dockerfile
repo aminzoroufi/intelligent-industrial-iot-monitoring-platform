@@ -12,7 +12,6 @@ RUN addgroup --system app && adduser --system --ingroup app --home /app app
 WORKDIR /app
 COPY --chown=app:app . /app
 RUN python -m pip install --root-user-action=ignore --no-cache-dir \
-      -r requirements/runtime.lock \
-    && python -m pip install --root-user-action=ignore --no-cache-dir --no-deps .
+      -r requirements/runtime.lock
 
 USER app

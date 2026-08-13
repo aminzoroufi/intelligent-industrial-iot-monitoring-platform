@@ -1,0 +1,86 @@
+{
+  "data_kind": "synthetic",
+  "deterministic_detector": {
+    "f1": 0.6786786786786787,
+    "false_negative": 107,
+    "false_positive": 0,
+    "false_positive_rate": 0.0,
+    "precision": 1.0,
+    "recall": 0.5136363636363637,
+    "true_negative": 55,
+    "true_positive": 113
+  },
+  "example_model_reasons": {
+    "current-overload": [
+      "current variation 0.0533 A is above its healthy 99th percentile 0.0173 A; current mean 0.68 A is above its healthy 99th percentile 0.638 A",
+      "current variation 0.0571 A is above its healthy 99th percentile 0.0173 A; current mean 0.691 A is above its healthy 99th percentile 0.638 A",
+      "current variation 0.0597 A is above its healthy 99th percentile 0.0173 A; current mean 0.701 A is above its healthy 99th percentile 0.638 A"
+    ],
+    "normal": [
+      "vibration RMS 1.1 m/s\u00b2 is below its healthy 1st percentile 1.11 m/s\u00b2; vibration/current ratio 1.76 m/s\u00b2/A is below its healthy 1st percentile 1.76 m/s\u00b2/A",
+      "vibration RMS 1.1 m/s\u00b2 is below its healthy 1st percentile 1.11 m/s\u00b2; vibration/current ratio 1.74 m/s\u00b2/A is below its healthy 1st percentile 1.76 m/s\u00b2/A",
+      "vibration/current ratio 1.75 m/s\u00b2/A is below its healthy 1st percentile 1.76 m/s\u00b2/A; vibration RMS 1.11 m/s\u00b2 is below its healthy 1st percentile 1.11 m/s\u00b2"
+    ],
+    "rising-temperature": [
+      "temperature variation 1.91 \u00b0C is above its healthy 99th percentile 0.244 \u00b0C; temperature level 50.6 \u00b0C is above its healthy 99th percentile 42.1 \u00b0C",
+      "temperature variation 1.89 \u00b0C is above its healthy 99th percentile 0.244 \u00b0C; temperature level 51.1 \u00b0C is above its healthy 99th percentile 42.1 \u00b0C",
+      "temperature variation 1.87 \u00b0C is above its healthy 99th percentile 0.244 \u00b0C; temperature level 51.7 \u00b0C is above its healthy 99th percentile 42.1 \u00b0C"
+    ],
+    "sensor-stuck": [
+      "temperature variation 0 \u00b0C is below its healthy 1st percentile 0.0506 \u00b0C; current variation 0.00876 A is below its healthy 1st percentile 0.00952 A",
+      "temperature variation 0 \u00b0C is below its healthy 1st percentile 0.0506 \u00b0C; current variation 0.00864 A is below its healthy 1st percentile 0.00952 A",
+      "temperature variation 0 \u00b0C is below its healthy 1st percentile 0.0506 \u00b0C; current variation 0.00867 A is below its healthy 1st percentile 0.00952 A"
+    ],
+    "vibration-imbalance": [
+      "vibration peak 4.5 m/s\u00b2 is above its healthy 99th percentile 2.85 m/s\u00b2; crest factor 2.73 ratio is above its healthy 99th percentile 2.24 ratio",
+      "vibration peak 4.79 m/s\u00b2 is above its healthy 99th percentile 2.85 m/s\u00b2; crest factor 2.74 ratio is above its healthy 99th percentile 2.24 ratio",
+      "vibration peak 6.54 m/s\u00b2 is above its healthy 99th percentile 2.85 m/s\u00b2; vibration RMS 1.83 m/s\u00b2 is above its healthy 99th percentile 1.18 m/s\u00b2"
+    ]
+  },
+  "field_performance_claimed": false,
+  "isolation_forest": {
+    "f1": 0.7293447293447293,
+    "false_negative": 92,
+    "false_positive": 3,
+    "false_positive_rate": 0.05454545454545454,
+    "precision": 0.9770992366412213,
+    "recall": 0.5818181818181818,
+    "true_negative": 52,
+    "true_positive": 128
+  },
+  "model_version": "iforest-v1-018a06157b92",
+  "scenarios": [
+    {
+      "evaluated_samples": 55,
+      "first_deterministic_detection_delay_s": null,
+      "first_model_detection_delay_s": 0.0,
+      "scenario": "normal"
+    },
+    {
+      "evaluated_samples": 55,
+      "first_deterministic_detection_delay_s": 400.0,
+      "first_model_detection_delay_s": 110.0,
+      "scenario": "rising-temperature"
+    },
+    {
+      "evaluated_samples": 55,
+      "first_deterministic_detection_delay_s": 340.0,
+      "first_model_detection_delay_s": 0.0,
+      "scenario": "vibration-imbalance"
+    },
+    {
+      "evaluated_samples": 55,
+      "first_deterministic_detection_delay_s": 310.0,
+      "first_model_detection_delay_s": 0.0,
+      "scenario": "current-overload"
+    },
+    {
+      "evaluated_samples": 55,
+      "first_deterministic_detection_delay_s": 20.0,
+      "first_model_detection_delay_s": 0.0,
+      "scenario": "sensor-stuck"
+    }
+  ],
+  "schema_version": 1,
+  "score_interpretation": "higher_is_more_anomalous; not a probability"
+}
